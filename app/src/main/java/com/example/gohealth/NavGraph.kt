@@ -23,5 +23,4 @@ fun Nav(){
             ScreenTest(navController)
         }
     }
-
 }
