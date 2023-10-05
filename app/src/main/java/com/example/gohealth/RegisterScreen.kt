@@ -1,5 +1,6 @@
 package com.example.gohealth
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,8 +50,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.gohealth.ui.theme.GoHealthTheme
 
 
 @Composable
@@ -60,7 +64,7 @@ fun Register(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.my_primary))
+            .background(color = Color(0xFF0260A8)) //color = colorResource(id = R.color.my_primary))
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -80,7 +84,7 @@ fun Register(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.background //Color.White,
                 )
             ){
                 Column(
@@ -128,7 +132,7 @@ fun Register(navController: NavHostController) {
                             .fillMaxWidth()
                             .padding(15.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.my_primary)),
+                            containerColor = MaterialTheme.colorScheme.onPrimaryContainer),//colorResource(id = R.color.my_primary)),
                     ) {
                         Text(
                             text = "Register",
@@ -136,13 +140,14 @@ fun Register(navController: NavHostController) {
                         )
                     }
                     Divider(
-                        color = Color.LightGray,
+                        color = MaterialTheme.colorScheme.onBackground, //Color.LightGray,
                         thickness = 1.dp,
                         modifier = Modifier.padding(top = 20.dp)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "Have an account?",
+                            style = MaterialTheme.typography.titleMedium,
                             color = Color.Gray
                         )
                         TextButton(onClick = {
@@ -150,7 +155,8 @@ fun Register(navController: NavHostController) {
                         }) {
                             Text(
                                 text ="Login here",
-                                color = colorResource(id = R.color.my_primary))
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary) //colorResource(id = R.color.my_primary))
                         }
                     }
                 }
@@ -217,4 +223,20 @@ fun TextInput(
         keyboardActions = keyboardActions
     )
 }
+
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//    name = "DefaultPreviewLight"
+//)
+//
+//@Composable
+//fun RegisterScreenPreview() {
+//    GoHealthTheme {
+//        Register()
+//    }
+//}
 
