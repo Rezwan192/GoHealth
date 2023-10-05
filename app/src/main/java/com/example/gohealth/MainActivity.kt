@@ -137,7 +137,7 @@ fun Login(navController: NavHostController) {
                     }
                     Button(
                         onClick = {
-                            navController.navigate("success")
+                            navController.navigate("patient")
                         },
                         modifier = Modifier
                             .fillMaxWidth()

@@ -22,5 +22,8 @@ fun Nav(){
         composable(route = "success") {
             ScreenTest(navController)
         }
+        composable(route = "patient") {
+            PatientHome(navController)
+        }
     }
 }
