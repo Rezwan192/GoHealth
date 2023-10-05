@@ -1,5 +1,6 @@
 package com.example.gohealth
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,8 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gohealth.ui.theme.GoHealthTheme
 
 
 @Composable
@@ -31,7 +35,7 @@ fun PatientHome() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.my_primary)),
+            .background(MaterialTheme.colorScheme.background),//colorResource(id = R.color.my_primary)),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -42,7 +46,8 @@ fun PatientHome() {
 
             Text(
                 text = "John Doe",
-                color = colorResource(id = R.color.white),
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onBackground,//colorResource(id = R.color.white),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -319,5 +324,21 @@ fun PatientHome() {
 
 
         }
+    }
+}
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
+
+@Composable
+fun PatientScreenPreview() {
+    GoHealthTheme {
+        PatientHome()
     }
 }

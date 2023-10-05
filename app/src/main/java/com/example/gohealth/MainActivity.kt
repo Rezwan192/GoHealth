@@ -1,5 +1,6 @@
 package com.example.gohealth
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -77,7 +80,7 @@ fun Login(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.my_primary))
+            .background(color = Color(0xFF0260A8))
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -97,7 +100,7 @@ fun Login(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.background,
                 )
             ){
                 Column(
@@ -108,12 +111,13 @@ fun Login(navController: NavHostController) {
                 ) {
                     Text(
                         text = "GoHealth",
-                        color = colorResource(id = R.color.my_primary),
+                        color = MaterialTheme.colorScheme.primary, //colorResource(id = R.color.my_primary),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Please enter your email address and password.",
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(top = 20.dp, bottom = 14.dp)
                     )
                     TextInput(
@@ -132,7 +136,7 @@ fun Login(navController: NavHostController) {
                     TextButton(onClick = {}) {
                         Text(
                             text = "Forgot Password?",
-                            color = colorResource(id = R.color.my_primary)
+                            color = MaterialTheme.colorScheme.primary//colorResource(id = R.color.my_primary)
                         )
                     }
                     Button(
@@ -143,7 +147,7 @@ fun Login(navController: NavHostController) {
                             .fillMaxWidth()
                             .padding(15.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.my_primary)),
+                            containerColor = MaterialTheme.colorScheme.onPrimaryContainer),//colorResource(id = R.color.my_primary)),
                     ) {
                         Text(
                             text = "Login",
@@ -152,6 +156,7 @@ fun Login(navController: NavHostController) {
                     }
                     Text(
                         text = "Or login with:",
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(bottom = 15.dp)
                     )
                     Row (verticalAlignment = Alignment.CenterVertically) {
@@ -169,13 +174,14 @@ fun Login(navController: NavHostController) {
                         )
                     }
                     Divider(
-                        color = Color.LightGray,
+                        color = MaterialTheme.colorScheme.onBackground,//Color.LightGray,
                         thickness = 1.dp,
                         modifier = Modifier.padding(top = 20.dp)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "Don't have an account?",
+                            style = MaterialTheme.typography.titleMedium,
                             color = Color.Gray
                         )
                         TextButton(onClick = {
@@ -183,7 +189,8 @@ fun Login(navController: NavHostController) {
                         }) {
                             Text(
                                 text ="Register Here",
-                                color = colorResource(id = R.color.my_primary))
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary) //colorResource(id = R.color.my_primary))
                         }
                     }
                 }
@@ -239,3 +246,18 @@ fun TextInput(
     )
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
+
+@Composable
+fun AppPreview() {
+    GoHealthTheme {
+        Nav()
+    }
+}
