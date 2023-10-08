@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.gohealth" />
+                  <option name="mobileSdkAppId" value="1:1005057864580:android:94c49b6e1d4e72f81723d1" />
+                  <option name="projectId" value="gohealth-6242d" />
+                  <option name="projectNumber" value="1005057864580" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

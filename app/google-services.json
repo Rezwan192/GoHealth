@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1005057864580",
+    "project_id": "gohealth-6242d",
+    "storage_bucket": "gohealth-6242d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005057864580:android:94c49b6e1d4e72f81723d1",
+        "android_client_info": {
+          "package_name": "com.example.gohealth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBTPtY8QlOPdk_GJQef_eBq6CxWqwC_bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
