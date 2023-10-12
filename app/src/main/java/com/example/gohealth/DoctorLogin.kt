@@ -1,8 +1,5 @@
 package com.example.gohealth
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,29 +51,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.gohealth.ui.theme.GoHealthTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GoHealthTheme {
-                Nav()
-            }
-        }
-    }
-}
-
-///@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Login(navController: NavHostController) {
+fun DoctorLogin(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
-    val focusManager:FocusManager = LocalFocusManager.current
+    val focusManager: FocusManager = LocalFocusManager.current
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFF0260A8))
+            .background(color = Color(0xFF12CEAC))
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -118,27 +101,22 @@ fun Login(navController: NavHostController) {
                         modifier = Modifier.padding(top = 20.dp, bottom = 14.dp)
                     )
                     TextInput(
-                        com.example.gohealth.InputType.Email,
+                        DocType.Email,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
                         })
                     )
                     TextInput(
-                        com.example.gohealth.InputType.Password,
+                        DocType.Password,
                         keyboardActions = KeyboardActions(onDone = {
                             focusManager.clearFocus()
                         }),
                         focusRequester = passwordFocusRequester
                     )
-                    TextButton(onClick = {navController.navigate("forgot")}) {
-                        Text(
-                            text = "Forgot Password?",
-                            color = MaterialTheme.colorScheme.primary//colorResource(id = R.color.my_primary)
-                        )
-                    }
+
                     Button(
                         onClick = {
-                            navController.navigate("patienthome")
+                            navController.navigate("doctorhome")
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -175,40 +153,26 @@ fun Login(navController: NavHostController) {
                         thickness = 1.dp,
                         modifier = Modifier.padding(top = 20.dp)
                     )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "Don't have an account?",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.Gray
-                        )
-                        TextButton(onClick = {
-                            navController.navigate("register")
-                        }) {
-                            Text(
-                                text ="Register Here",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary) //colorResource(id = R.color.my_primary))
-                        }
-                    }
+
                 }
             }
         }
     }
 }
 
-sealed class InputType(
+sealed class DocType(
     val label: String,
     val icon: ImageVector,
     val keyboardOperations: KeyboardOptions,
     val visualTransformation: VisualTransformation
 ) {
-    object Email: com.example.gohealth.InputType(
+    object Email: com.example.gohealth.DocType(
         label = "Email Address",
         icon = Icons.Default.Email,
         keyboardOperations = KeyboardOptions(imeAction = ImeAction.Next),
         visualTransformation = VisualTransformation.None
     )
-    object Password: com.example.gohealth.InputType(
+    object Password: com.example.gohealth.DocType(
         label = "Password",
         icon = Icons.Default.Lock,
         keyboardOperations = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
@@ -219,12 +183,12 @@ sealed class InputType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInput(
-    inputType: com.example.gohealth.InputType,
+    inputType: com.example.gohealth.DocType,
     focusRequester: FocusRequester? = null,
     keyboardActions: KeyboardActions
 ) {
 
-    var text:String by remember { mutableStateOf("")}
+    var text:String by remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = text,
@@ -234,7 +198,7 @@ fun TextInput(
             .padding(horizontal = 15.dp)
             .focusRequester(focusRequester ?: FocusRequester()),
         leadingIcon = { Icon(imageVector = inputType.icon, contentDescription = null) },
-        label = { Text(text = inputType.label)},
+        label = { Text(text = inputType.label) },
         shape = RoundedCornerShape(32.dp),
         singleLine = true,
         keyboardOptions = inputType.keyboardOperations,
@@ -242,19 +206,3 @@ fun TextInput(
         keyboardActions = keyboardActions
     )
 }
-
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
-
-//@Composable
-//fun AppPreview() {
-//    GoHealthTheme {
-//        Nav()
-//    }
-//}

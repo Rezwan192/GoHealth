@@ -21,18 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DoctorProfile(){
+fun DoctorProfile(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.my_primary)),
+            .background(color = Color(0xFF12CEAC)),
     ){
 
         //Patient information
@@ -229,7 +229,7 @@ fun DoctorProfile(){
                     .fillMaxWidth()
                     .padding(8.dp),
             ){
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { navController.navigate("doctorhome")}) {
                     Text(
                         text = "Back",
                         color = colorResource(id = R.color.white),
