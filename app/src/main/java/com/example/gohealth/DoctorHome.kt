@@ -1,6 +1,5 @@
 package com.example.gohealth
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,18 +37,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.gohealth.ui.theme.GoHealthTheme
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DoctorHome(name: String, modifier: Modifier = Modifier) {
+fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) {
     Scaffold(Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             MediumTopAppBar(
                 title = {
-                    Text(text = "Welcome Back, Dr. $name", maxLines = 2, style = MaterialTheme.typography.headlineLarge)
+                    Text(text = "Welcome Back, Dr. Shmoe", maxLines = 2, style = MaterialTheme.typography.headlineLarge)
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
@@ -81,6 +79,7 @@ fun DoctorHome(name: String, modifier: Modifier = Modifier) {
                     .padding(contentPadding),
                 content = {
                     item(span = { GridItemSpan(2)}) { ProfilePicture() }
+                    item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Filled.Email, title = "Inbox") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { /*TODO*/} }
@@ -88,7 +87,6 @@ fun DoctorHome(name: String, modifier: Modifier = Modifier) {
                     item { DoctorMenuCard(icon = Icons.Filled.List, title = "Follow-Ups") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Face, title = "Patients") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { /*TODO*/} }
                 },
             )
         }
@@ -148,18 +146,18 @@ fun ProfilePicture(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//    name = "DefaultPreviewLight"
+//)
 
-@Composable
-fun ScreenPreview() {
-    GoHealthTheme {
-        DoctorHome("Doe")
-    }
-}
+//@Composable
+//fun ScreenPreview() {
+//    GoHealthTheme {
+//        DoctorHome("Doe")
+//    }
+//}

@@ -10,20 +10,38 @@ import androidx.navigation.compose.rememberNavController
 fun Nav(){
 
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login"){
+    NavHost(navController = navController, startDestination = "accounttype"){
+
+        composable(route = "accounttype"){
+            ChooseAccountType(navController)
+        }
 
         composable(route = "login"){
             Login(navController)
         }
-
+        composable(route = "doctorlogin"){
+            DoctorLogin(navController)
+        }
         composable(route = "register"){
             Register(navController)
+        }
+        composable(route = "forgot"){
+            ResetPassword(navController)
         }
         composable(route = "success") {
             ScreenTest(navController)
         }
-        composable(route = "patient") {
+        composable(route = "patienthome") {
             PatientHome(navController)
+        }
+        composable(route = "doctorhome") {
+            DoctorHome(navController)
+        }
+        composable(route = "patientprofile"){
+            PatientProfile(navController)
+        }
+        composable(route = "doctorprofile"){
+            DoctorProfile(navController)
         }
     }
 }
