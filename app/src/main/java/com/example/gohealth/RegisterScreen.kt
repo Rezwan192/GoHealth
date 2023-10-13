@@ -1,6 +1,5 @@
 package com.example.gohealth
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,23 +42,27 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.gohealth.ui.theme.GoHealthTheme
+import com.example.gohealth.data.Patient
+import com.example.gohealth.data.PatientRepository
 
 
 @Composable
 fun Register(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager:FocusManager = LocalFocusManager.current
+    val patientRepository = PatientRepository()
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -99,34 +102,49 @@ fun Register(navController: NavHostController) {
                         textAlign = TextAlign.Center
                     )
                     TextInput(
+                        value = firstName,
                         com.example.gohealth.OutputType.First,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
-                        })
+                        }),
+                        onValueChange = { firstName = it }
                     )
                     TextInput(
+                        value = lastName,
                         com.example.gohealth.OutputType.Last,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
-                        })
+                        }),
+                        onValueChange = { lastName = it }
                     )
                     TextInput(
+                        value = email,
                         com.example.gohealth.OutputType.Email,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
-                        })
+                        }),
+                        onValueChange = { email = it }
                     )
                     TextInput(
+                        value = password,
                         com.example.gohealth.OutputType.Password,
                         keyboardActions = KeyboardActions(onDone = {
                             focusManager.clearFocus()
                         }),
-                        focusRequester = passwordFocusRequester
+                        focusRequester = passwordFocusRequester,
+                        onValueChange = { password = it }
                     )
 
                     Button(
                         onClick = {
-                              navController.navigate("login")
+                            // add new patient to firestore
+                            val newPatient = Patient(
+                                firstName = firstName,
+                                lastName = lastName,
+                                email = email
+                            )
+                            patientRepository.addPatient(newPatient)
+                            navController.navigate("login")
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -169,8 +187,9 @@ sealed class OutputType(
     val label: String,
     val icon: ImageVector,
     val keyboardOperations: KeyboardOptions,
-    val visualTransformation: VisualTransformation
+    val visualTransformation: VisualTransformation,
 ) {
+
     object First: com.example.gohealth.OutputType(
         label = "First Name",
         icon = Icons.Default.AccountCircle,
@@ -200,16 +219,16 @@ sealed class OutputType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInput(
+    value: String,
     inputType: com.example.gohealth.OutputType,
     focusRequester: FocusRequester? = null,
-    keyboardActions: KeyboardActions
+    keyboardActions: KeyboardActions,
+    onValueChange: (String) -> Unit
 ) {
 
-    var text:String by remember { mutableStateOf("")}
-
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = value,
+        onValueChange = { newValue -> onValueChange(newValue) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp)

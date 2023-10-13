@@ -1,41 +1,19 @@
 package com.example.gohealth.data
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class Patient(
-    val name: String,
-    val email: String,
-    val phoneNumber: String,
-    val address: String,
-    val gender: String,
-    val birthDate: String,
-    val ssn: String?,
-    val allergies: String?,
-    val insurance: String?
+    val firstName: String,
+    val lastName: String,
+    val email: String
 )
 
-val patientRepository = PatientRepository()
-
-// manual entering Patient records for testing purposes
-fun AddPatientManually(){
-    val patient = Patient(
-        "Orsa Lambertini",
-        "olambertini0@hubpages.com",
-        "149-964-1089",
-        "7184 Morningstar Circle",
-        "Female",
-        "6/17/2023",
-        null,
-        null,
-        null
-    )
-    patientRepository.addPatient(patient)
-}
-
 class PatientRepository {
-    private val db = Firebase.firestore
+    private val db = FirebaseFirestore.getInstance()
 
+    // add new patient to the Patients collection
     fun addPatient(patient: Patient) {
         db.collection("patients")
             .add(patient)
