@@ -15,7 +15,6 @@ fun Nav(){
         composable(route = "accounttype"){
             ChooseAccountType(navController)
         }
-
         composable(route = "login"){
             Login(navController)
         }
@@ -42,6 +41,9 @@ fun Nav(){
         }
         composable(route = "doctorprofile"){
             DoctorProfile(navController)
+        }
+        composable(route = "patientscreen"){
+            PatientsList(navController)
         }
     }
 }
