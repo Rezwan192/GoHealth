@@ -1,4 +1,4 @@
-package com.example.gohealth
+package com.example.gohealth.doctor
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,6 +51,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gohealth.R
 
 @Composable
 fun DoctorLogin(navController: NavHostController) {
@@ -166,13 +167,13 @@ sealed class DocType(
     val keyboardOperations: KeyboardOptions,
     val visualTransformation: VisualTransformation
 ) {
-    object Email: com.example.gohealth.DocType(
+    object Email: DocType(
         label = "Email Address",
         icon = Icons.Default.Email,
         keyboardOperations = KeyboardOptions(imeAction = ImeAction.Next),
         visualTransformation = VisualTransformation.None
     )
-    object Password: com.example.gohealth.DocType(
+    object Password: DocType(
         label = "Password",
         icon = Icons.Default.Lock,
         keyboardOperations = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
@@ -183,7 +184,7 @@ sealed class DocType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInput(
-    inputType: com.example.gohealth.DocType,
+    inputType: DocType,
     focusRequester: FocusRequester? = null,
     keyboardActions: KeyboardActions
 ) {

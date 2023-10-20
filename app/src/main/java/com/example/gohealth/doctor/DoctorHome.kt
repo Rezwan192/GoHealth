@@ -1,4 +1,4 @@
-package com.example.gohealth
+package com.example.gohealth.doctor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
