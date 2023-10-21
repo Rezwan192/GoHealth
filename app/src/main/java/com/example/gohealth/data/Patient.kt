@@ -11,7 +11,10 @@ data class Patient(
     val firstName: String,
     val lastName: String,
     val email: String
-)
+) {
+    // No-argument constructor as required by Firestore
+    constructor() : this ("","","")
+}
 
 class PatientRepository {
     private val db = Firebase.firestore
