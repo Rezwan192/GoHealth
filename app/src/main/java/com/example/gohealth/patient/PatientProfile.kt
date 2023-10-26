@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -229,14 +228,12 @@ fun PatientProfile(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(8.dp),
             ){
-                TextButton(onClick = { navController.navigate("patienthome")}) {
-                    Text(
-                        text = "Back",
-                        color = colorResource(id = R.color.white),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = " ",
+                    color = colorResource(id = R.color.white),
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Row(
