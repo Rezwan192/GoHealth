@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,6 +54,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Name:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -72,6 +74,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "DOB:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -91,6 +94,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Height:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -110,6 +114,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Weight:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -129,6 +134,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Blood Type:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -148,6 +154,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Contact Info:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -167,6 +174,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Primary Doctor:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -186,6 +194,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Prescriptions:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -205,6 +214,7 @@ fun PatientProfile(navController: NavHostController) {
                     Text(
                         text = "Allergies:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -214,6 +224,7 @@ fun PatientProfile(navController: NavHostController) {
                         color = colorResource(id = R.color.black),
                         fontSize = 18.sp,
                     )
+
                 }
             }
         }
@@ -226,7 +237,7 @@ fun PatientProfile(navController: NavHostController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(5.dp),
             ){
                 Text(
                     text = " ",
