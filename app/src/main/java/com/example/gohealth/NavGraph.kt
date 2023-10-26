@@ -51,5 +51,8 @@ fun Nav(){
         composable(route = "patientscreen"){
             PatientsList(navController)
         }
+        composable(route = "prescription"){
+
+        }
     }
 }
