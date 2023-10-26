@@ -1,4 +1,4 @@
-package com.example.gohealth
+package com.example.gohealth.patient
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,18 +20,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gohealth.R
 
 
 //@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DoctorProfile(navController: NavHostController) {
+fun PatientProfile(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFF12CEAC)),
+            .background(color = colorResource(id = R.color.my_primary)),
     ){
 
         //Patient information
@@ -53,6 +54,127 @@ fun DoctorProfile(navController: NavHostController) {
                     Text(
                         text = "Name:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " Johnny C. Doe",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "DOB:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " 01/01/2000",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "Height:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " 5'8",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "Weight:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " 160 LB",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "Blood Type:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " AB+",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "Contact Info:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = " CashShmoney@gmail.com",
+                        color = colorResource(id = R.color.black),
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ){
+                    Text(
+                        text = "Primary Doctor:",
+                        color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -70,14 +192,15 @@ fun DoctorProfile(navController: NavHostController) {
                         .padding(8.dp),
                 ){
                     Text(
-                        text = "Medical License #:",
+                        text = "Prescriptions:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = " 12345678",
+                        text = " Generic Drug A, Generic Drug B, and Generic Drug C",
                         color = colorResource(id = R.color.black),
                         fontSize = 18.sp,
                     )
@@ -89,133 +212,20 @@ fun DoctorProfile(navController: NavHostController) {
                         .padding(8.dp),
                 ){
                     Text(
-                        text = "Languages:",
+                        text = "Allergies:",
                         color = colorResource(id = R.color.black),
+                        textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = " English, Spanish and Japanese",
+                        text = " N/A",
                         color = colorResource(id = R.color.black),
                         fontSize = 18.sp,
                     )
+
                 }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Education:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " Harvard University",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Specialty:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " Family Medicine",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Experience:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " 8+ Years",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Contact Info:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " realdoctor@gmail.com",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Phone Number:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " (123)-456-7890",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                ){
-                    Text(
-                        text = "Insurances:",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = " Medicare, Medicaid, Blue Shield Cross",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 18.sp,
-                    )
-                }
-
             }
         }
 
@@ -227,16 +237,14 @@ fun DoctorProfile(navController: NavHostController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(5.dp),
             ){
-                TextButton(onClick = { navController.navigate("doctorhome")}) {
-                    Text(
-                        text = "Back",
-                        color = colorResource(id = R.color.white),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = " ",
+                    color = colorResource(id = R.color.white),
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Row(
@@ -255,7 +263,7 @@ fun DoctorProfile(navController: NavHostController) {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = "Welcome! Dr. Joe Shmoe",
+                    text = "Welcome! John Doe",
                     color = colorResource(id = R.color.white),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
@@ -264,3 +272,4 @@ fun DoctorProfile(navController: NavHostController) {
         }
     }
 }
+

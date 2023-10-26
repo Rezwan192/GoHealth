@@ -4,6 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.gohealth.doctor.DoctorHome
+import com.example.gohealth.doctor.DoctorLogin
+import com.example.gohealth.doctor.DoctorProfile
+import com.example.gohealth.doctor.PatientsList
+import com.example.gohealth.patient.PatientHome
+import com.example.gohealth.patient.PatientProfile
+import com.example.gohealth.patient.PrescriptionList
 
 
 @Composable
@@ -15,7 +22,6 @@ fun Nav(){
         composable(route = "accounttype"){
             ChooseAccountType(navController)
         }
-
         composable(route = "login"){
             Login(navController)
         }
@@ -42,6 +48,12 @@ fun Nav(){
         }
         composable(route = "doctorprofile"){
             DoctorProfile(navController)
+        }
+        composable(route = "patientscreen"){
+            PatientsList(navController)
+        }
+        composable(route = "prescription"){
+            PrescriptionList(navController)
         }
     }
 }

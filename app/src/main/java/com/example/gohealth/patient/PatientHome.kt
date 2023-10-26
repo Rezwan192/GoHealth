@@ -1,4 +1,4 @@
-package com.example.gohealth
+package com.example.gohealth.patient
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.gohealth.R
 
 
 @Composable
@@ -132,7 +133,7 @@ fun PatientHome(navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = {navController.navigate("prescription")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
@@ -210,12 +211,12 @@ fun PatientHome(navController: NavHostController) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.inboxicon),
+                            painter = painterResource(id = R.drawable.changedoctoricon),
                             contentDescription = null,  // Image is decorative; no content description needed
                             modifier = Modifier.size(40.dp)  // Adjust the size of the image as needed
                         )
                         Text(
-                            text = "Inbox",
+                            text = "Change Doctor",
                             color = colorResource(id = R.color.black),
                             fontSize = 12.sp,  // Adjusted font size to fit with image
                             fontWeight = FontWeight.Bold
@@ -253,72 +254,6 @@ fun PatientHome(navController: NavHostController) {
                 }
 
             }
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.Center
-            ) {
-
-
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .size(width = 135.dp, height = 100.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White
-                    )
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.changedoctoricon),
-                            contentDescription = null,  // Image is decorative; no content description needed
-                            modifier = Modifier.size(40.dp)  // Adjust the size of the image as needed
-                        )
-                        Text(
-                            text = "Change Doctor",
-                            color = colorResource(id = R.color.black),
-                            fontSize = 12.sp,  // Adjusted font size to fit with image
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .size(width = 135.dp, height = 100.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White
-                    )
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.helpicon),
-                            contentDescription = null,  // Image is decorative; no content description needed
-                            modifier = Modifier.size(40.dp)  // Adjust the size of the image as needed
-                        )
-                        Text(
-                            text = "Help",
-                            color = colorResource(id = R.color.black),
-                            fontSize = 12.sp,  // Adjusted font size to fit with image
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-            }
-
-
         }
     }
 }

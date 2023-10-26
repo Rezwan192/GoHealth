@@ -1,4 +1,4 @@
-package com.example.gohealth
+package com.example.gohealth.doctor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,8 +12,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.DateRange
@@ -28,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -79,13 +78,11 @@ fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) 
                     .padding(contentPadding),
                 content = {
                     item(span = { GridItemSpan(2)}) { ProfilePicture() }
-                    item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Filled.Email, title = "Inbox") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/} }
+                    item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { navController.navigate("doctorprofile")} }
+                    item { DoctorMenuCard(icon = Icons.Rounded.Face, title = "Patients") { navController.navigate("patientscreen")} }
+                    item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/ } }
                     item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Outlined.DateRange, title = "Appointment Requests") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Filled.List, title = "Follow-Ups") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Rounded.Face, title = "Patients") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { /*TODO*/} }
                 },
             )
@@ -102,7 +99,7 @@ fun DoctorMenuCard(
     onClick: () -> Unit
 ) {
     Card(
-        onClick = { onClick },
+        onClick = { onClick() },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         modifier = Modifier
             .size(225.dp)
