@@ -1,5 +1,6 @@
 package com.example.gohealth
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,9 +50,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 
 @Composable
@@ -63,6 +68,7 @@ fun Register(navController: NavHostController) {
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -98,8 +104,13 @@ fun Register(navController: NavHostController) {
                 ) {
                     Text(
                         text = "Please enter your name, email address and password.",
-                        modifier = Modifier.padding(top = 20.dp, bottom = 14.dp),
+                        modifier = Modifier.padding(top = 10.dp, bottom = 15.dp),
                         textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 15.sp
                     )
                     TextInput(
                         value = firstName,
@@ -144,7 +155,30 @@ fun Register(navController: NavHostController) {
                                 email = email
                             )
                             patientRepository.addPatient(newPatient)
-                            navController.navigate("login")
+                            // After adding a new patient to Firestore
+                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        navController.navigate("login")
+                                    } else {
+                                        val exception = task.exception
+                                        if (exception is FirebaseAuthInvalidCredentialsException) {
+                                            val errorCode = exception.errorCode
+                                            if (errorCode == "ERROR_INVALID_EMAIL") {
+                                                errorMessage = "Please enter a valid email address."
+                                            } else if (errorCode == "ERROR_WEAK_PASSWORD") {
+                                                errorMessage = "Please enter a password with 6 or more characters."
+                                            } else {
+                                                errorMessage = "Registration failed: An error occurred."
+                                            }
+                                        } else if (exception is FirebaseAuthUserCollisionException) {
+                                            errorMessage = "A user with this email address already exists."
+                                        } else {
+                                            errorMessage = "Registration failed: An error occurred."
+                                        }
+                                        Log.e("FirebaseAuth", "Registration error: ${exception?.message}", exception)
+                                    }
+                                }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
