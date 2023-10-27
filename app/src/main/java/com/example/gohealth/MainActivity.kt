@@ -170,6 +170,7 @@ fun Login(navController: NavHostController) {
                                             } else {
                                                 errorMessage = "Login failed: An error occurred."
                                             }
+
 //                                        if (exception is FirebaseAuthInvalidUserException) {
 //                                            val errorCode = exception.errorCode
 //                                            if (errorCode == "ERROR_USER_NOT_FOUND") {
@@ -179,6 +180,7 @@ fun Login(navController: NavHostController) {
 //                                            }
 //                                        } else if (exception is FirebaseAuthInvalidCredentialsException) {
 //                                            errorMessage = "Incorrect email or password."
+
                                         } else {
                                             errorMessage = "Login failed: An error occurred."
                                         }
