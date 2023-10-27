@@ -10,6 +10,7 @@ import com.example.gohealth.doctor.DoctorProfile
 import com.example.gohealth.doctor.PatientsList
 import com.example.gohealth.patient.PatientHome
 import com.example.gohealth.patient.PatientProfile
+import com.example.gohealth.patient.PrescriptionList
 
 
 @Composable
@@ -50,6 +51,9 @@ fun Nav(){
         }
         composable(route = "patientscreen"){
             PatientsList(navController)
+        }
+        composable(route = "prescription"){
+            PrescriptionList(navController)
         }
     }
 }

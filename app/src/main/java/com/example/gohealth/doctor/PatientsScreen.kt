@@ -1,7 +1,6 @@
 package com.example.gohealth.doctor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -65,7 +63,7 @@ fun PatientsList(navController: NavHostController, patientRepository: PatientRep
                 containerColor = MaterialTheme.colorScheme.background,
             ),
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {  // Nav to go back to  doc home
+                IconButton(onClick = { navController.navigate("doctorhome")}) {  // Nav to go back to  doc home
                     Icon(Icons.Default.ArrowBack, contentDescription = "Go back")
                 }
             }
@@ -104,7 +102,7 @@ fun PatientsList(navController: NavHostController, patientRepository: PatientRep
                 // Create a Card for each Patient record
                 LazyColumn {
                     items(patients.value ?: listOf()) { patient ->
-                        PatientCard(patient = patient)
+                        PatientCard(patient = patient, navController)
                     }
                 }
             }
@@ -113,7 +111,7 @@ fun PatientsList(navController: NavHostController, patientRepository: PatientRep
 }
 
 @Composable
-fun PatientCard(patient: Patient) {
+fun PatientCard(patient: Patient,navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -157,7 +155,7 @@ fun PatientCard(patient: Patient) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
-                onClick = { /*TODO*/ }, // Nav to patient profile
+                onClick = { navController.navigate("patientprofile") }, // Nav to patient profile
                 colors = ButtonDefaults.buttonColors(
                     MaterialTheme.colorScheme.secondaryContainer
                 ),
