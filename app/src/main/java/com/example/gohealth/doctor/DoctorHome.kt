@@ -26,7 +26,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -81,7 +80,7 @@ fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) 
                     item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { navController.navigate("doctorprofile")} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Face, title = "Patients") { navController.navigate("patientscreen")} }
                     item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/ } }
-                    item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { /*TODO*/} }
+                    item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { navController.navigate("appointment")} }
                     item { DoctorMenuCard(icon = Icons.Outlined.DateRange, title = "Appointment Requests") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { /*TODO*/} }
                 },

@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.gohealth.data.Appointment
 import com.example.gohealth.data.AppointmentRepository
 import com.example.gohealth.data.Doctor
@@ -38,7 +39,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DoctorAppointments() {
+fun DoctorAppointments(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
