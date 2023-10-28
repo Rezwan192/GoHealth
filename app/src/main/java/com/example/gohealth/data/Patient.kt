@@ -1,19 +1,17 @@
 package com.example.gohealth.data
 
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 
 data class Patient(
+    val id: String = "",
     val firstName: String,
     val lastName: String,
     val email: String
 ) {
     // No-argument constructor as required by Firestore
-    constructor() : this ("","","")
+    constructor() : this ("", "","","")
 }
 
 class PatientRepository {
@@ -25,7 +23,9 @@ class PatientRepository {
         db.collection("patients")
             .add(patient)
             .addOnSuccessListener { documentReference ->
-                println("Patient added with ID: ${documentReference.id}")
+                val documentId = documentReference.id
+                println("Patient added with ID: $documentId")
+                documentReference.update("id", documentId) // add the document Id to the patient id field
             }
             .addOnFailureListener { e ->
                 println("Error adding patient: $e")
