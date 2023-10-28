@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,14 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.gohealth.R
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PrescriptionList() {
+fun PrescriptionList(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,22 +40,23 @@ fun PrescriptionList() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ){
-            //Bring you back to the patient's menu screen.
-            TextButton(
-                onClick = { /*TODO*/},
+            Text(
                 modifier = Modifier
-                    .align(Alignment.Start)
-            ) {
-                Text(
-                    text = "Back",
-                    color = colorResource(id = R.color.white),
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                    .padding(12.dp),
+                text = "Prescriptions",
+                color = colorResource(id = R.color.white),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-            Button(
-                onClick = { /*TODO*/ },
+            Image(
+                painter = painterResource(id = R.drawable.pills),
+                contentDescription = "Image of various pills",
+                modifier = Modifier.size(100.dp)
+            )
+
+            ElevatedButton(
+                onClick = { },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,6 +69,7 @@ fun PrescriptionList() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ){
+                    // Shows image of the prescription
                     Image(
                         painter = painterResource(id = R.drawable.antibiotics),
                         contentDescription = null,
@@ -75,18 +77,26 @@ fun PrescriptionList() {
                             .size(100.dp)
                             .padding(12.dp)
                     )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Antibiotics",
+                            color = colorResource(id = R.color.black),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                    Text(
-                        text = "Antibiotics",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                        // Used to add prescription to patient's database.
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = "Order")
+                        }
+                    }
                 }
             }
 
-            Button(
-                onClick = { /*TODO*/ },
+            ElevatedButton(
+                onClick = { },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,6 +109,7 @@ fun PrescriptionList() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ){
+                    // Shows image of the prescription
                     Image(
                         painter = painterResource(id = R.drawable.painkillers),
                         contentDescription = null,
@@ -106,21 +117,31 @@ fun PrescriptionList() {
                             .size(100.dp)
                             .padding(5.dp)
                     )
-                    Text(
-                        text = "Painkillers",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Painkillers",
+                            color = colorResource(id = R.color.black),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        // Used to add prescription to patient's database.
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = "Order")
+                        }
+                    }
                 }
             }
 
-            Button(
-                onClick = { /*TODO*/ },
+            ElevatedButton(
+                onClick = { },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp),
+
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White
                 )
@@ -129,6 +150,7 @@ fun PrescriptionList() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ){
+                    // Shows image of the prescription
                     Image(
                         painter = painterResource(id = R.drawable.inhaler),
                         contentDescription = null,
@@ -136,18 +158,26 @@ fun PrescriptionList() {
                             .size(100.dp)
                             .padding(5.dp)
                     )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Asthma Inhaler",
+                            color = colorResource(id = R.color.black),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                    Text(
-                        text = "Asthma Inhaler",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                        // Used to add prescription to patient's database.
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = "Order")
+                        }
+                    }
                 }
             }
 
-            Button(
-                onClick = { /*TODO*/ },
+            ElevatedButton(
+                onClick = { },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,6 +190,7 @@ fun PrescriptionList() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ){
+                    // Shows image of the prescription
                     Image(
                         painter = painterResource(id = R.drawable.bloodpressuremedications),
                         contentDescription = null,
@@ -167,15 +198,25 @@ fun PrescriptionList() {
                             .size(100.dp)
                             .padding(5.dp)
                     )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally){
+                        Text(
+                            text = "BP Medication",
+                            color = colorResource(id = R.color.black),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                    Text(
-                        text = "BP Medication",
-                        color = colorResource(id = R.color.black),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                        // Used to add prescription to patient's database.
+                        Button(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Text(text = "Order")
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+

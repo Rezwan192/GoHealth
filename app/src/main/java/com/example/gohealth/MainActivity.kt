@@ -1,6 +1,7 @@
 package com.example.gohealth
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -57,6 +58,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.ui.theme.GoHealthTheme
 import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +81,9 @@ class MainActivity : ComponentActivity() {
 fun Login(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager:FocusManager = LocalFocusManager.current
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -105,7 +114,7 @@ fun Login(navController: NavHostController) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 15.dp, bottom = 15.dp),
+                        .padding(top = 10.dp, bottom = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -117,20 +126,29 @@ fun Login(navController: NavHostController) {
                     Text(
                         text = "Please enter your email address and password.",
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(top = 20.dp, bottom = 14.dp)
+                        modifier = Modifier.padding(top = 10.dp, bottom = 15.dp)
+                    )
+                    Text(
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 15.sp
                     )
                     TextInput(
-                        com.example.gohealth.InputType.Email,
+                        value = email,
+                        com.example.gohealth.OutputType.Email,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
-                        })
+                        }),
+                        onValueChange = { email = it }
                     )
                     TextInput(
-                        com.example.gohealth.InputType.Password,
+                        value = password,
+                        com.example.gohealth.OutputType.Password,
                         keyboardActions = KeyboardActions(onDone = {
                             focusManager.clearFocus()
                         }),
-                        focusRequester = passwordFocusRequester
+                        focusRequester = passwordFocusRequester,
+                        onValueChange = { password = it }
                     )
                     TextButton(onClick = {navController.navigate("forgot")}) {
                         Text(
@@ -140,7 +158,35 @@ fun Login(navController: NavHostController) {
                     }
                     Button(
                         onClick = {
-                            navController.navigate("patienthome")
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        navController.navigate("patienthome")
+                                    } else {
+                                        val exception = task.exception
+                                        if (exception is com.google.firebase.FirebaseException) {
+                                            if (exception.message?.contains("INVALID_LOGIN_CREDENTIALS") == true) {
+                                                errorMessage = "Incorrect email or password."
+                                            } else {
+                                                errorMessage = "Login failed: An error occurred."
+                                            }
+
+//                                        if (exception is FirebaseAuthInvalidUserException) {
+//                                            val errorCode = exception.errorCode
+//                                            if (errorCode == "ERROR_USER_NOT_FOUND") {
+//                                                errorMessage = "Incorrect email or password"
+//                                            } else {
+//                                                errorMessage = "Login failed: An error occurred."
+//                                            }
+//                                        } else if (exception is FirebaseAuthInvalidCredentialsException) {
+//                                            errorMessage = "Incorrect email or password."
+
+                                        } else {
+                                            errorMessage = "Login failed: An error occurred."
+                                        }
+                                        Log.e("FirebaseAuth", "Login error: ${exception?.message}", exception)
+                                    }
+                                }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
