@@ -47,4 +47,18 @@ class AppointmentRepository {
                 println("Error rescheduling appointment: $e")
             }
     }
+
+    fun getAllAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.get()
+            // get all non-empty appointment records & convert to Doctor data class
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
 }
