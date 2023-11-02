@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -33,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,8 +57,12 @@ import androidx.navigation.NavHostController
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import kotlinx.coroutines.tasks.await
+import java.util.regex.Pattern
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -64,11 +70,13 @@ fun Register(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager:FocusManager = LocalFocusManager.current
     val patientRepository = PatientRepository()
+    val coroutineScope = rememberCoroutineScope()
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+    var isPasswordPolicyDialogOpen by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -145,40 +153,92 @@ fun Register(navController: NavHostController) {
                         focusRequester = passwordFocusRequester,
                         onValueChange = { password = it }
                     )
+                    Button(
+                        onClick = {
+                            isPasswordPolicyDialogOpen = true
+                        },
+                        modifier = Modifier.padding(top = 11.dp)
+                    ) {
+                        Text("Password Policy")
+                    }
+
+                    if (isPasswordPolicyDialogOpen) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                isPasswordPolicyDialogOpen = false
+                            },
+                            title = {
+                                Text("Password Policy",)
+                            },
+                            text = {
+                                BulletList(
+                                    "At least one digit (0-9)",
+                                    "At least one lowercase letter (a-z)",
+                                    "At least one uppercase letter (A-Z)",
+                                    "At least one special character from the set @#$%^&+=!",
+                                    "A minimum length of 8 characters"
+                                )
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        isPasswordPolicyDialogOpen = false
+                                    }
+                                ) {
+                                    Text("Close")
+                                }
+                            }
+                        )
+                    }
 
                     Button(
                         onClick = {
-                            // add new patient to firestore
-                            val newPatient = Patient(
-                                firstName = firstName,
-                                lastName = lastName,
-                                email = email
-                            )
-                            patientRepository.addPatient(newPatient)
-                            // After adding a new patient to Firestore
-                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        navController.navigate("login")
-                                    } else {
-                                        val exception = task.exception
-                                        if (exception is FirebaseAuthInvalidCredentialsException) {
-                                            val errorCode = exception.errorCode
-                                            if (errorCode == "ERROR_INVALID_EMAIL") {
-                                                errorMessage = "Please enter a valid email address."
-                                            } else if (errorCode == "ERROR_WEAK_PASSWORD") {
-                                                errorMessage = "Please enter a password with 6 or more characters."
-                                            } else {
-                                                errorMessage = "Registration failed: An error occurred."
-                                            }
-                                        } else if (exception is FirebaseAuthUserCollisionException) {
-                                            errorMessage = "A user with this email address already exists."
-                                        } else {
-                                            errorMessage = "Registration failed: An error occurred."
-                                        }
-                                        Log.e("FirebaseAuth", "Registration error: ${exception?.message}", exception)
+                            coroutineScope.launch {
+                                try {
+                                    // Check the password strength before attempting user creation
+                                    if (!isStrongPassword(password)) {
+                                        errorMessage = "Password does not meet criteria of password policy."
+                                        isPasswordPolicyDialogOpen = true
+                                        val error = FirebaseAuthException(
+                                            "ERROR_WEAK_PASSWORD",
+                                            "Password does not meet criteria of password policy."
+                                        )
+                                        Log.e("FirebaseAuth", "Registration error: ${error.message}", error)
+                                        throw error
                                     }
+
+                                    // Create user in Firebase Authentication
+                                    FirebaseAuth.getInstance()
+                                        .createUserWithEmailAndPassword(email, password).await()
+
+                                    // Add new patient to Firestore
+                                    val newPatient = Patient(
+                                        firstName = firstName,
+                                        lastName = lastName,
+                                        email = email
+                                    )
+                                    patientRepository.addPatient(newPatient)
+
+                                    navController.navigate("login")
+
+                                } catch (error: FirebaseAuthInvalidCredentialsException) {
+                                    // Handle invalid email
+                                    errorMessage = "Please enter a valid email address"
+                                    Log.e("FirebaseAuth", "Registration error: ${error.message}", error)
+                                } catch (error: FirebaseAuthUserCollisionException) {
+                                    // Handle email collision
+                                    errorMessage = "A user with this email address already exists"
+                                    Log.e("FirebaseAuth", "Registration error: ${error.message}", error)
+                                } catch (error: FirebaseAuthException) {
+                                    // Handle other FirebaseAuth exceptions
+                                    errorMessage = error.message ?: "Registration failed: An error occurred. A"
+                                    Log.e("FirebaseAuth", "Registration error: ${error.message}", error)
+                                } catch (error: Exception) {
+                                    // Handle other general exceptions
+                                    errorMessage = error.message ?: "Registration failed: An error occurred. B"
+                                    Log.e("FirebaseAuth", "Registration error: ${error.message}", error)
                                 }
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -212,6 +272,30 @@ fun Register(navController: NavHostController) {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+fun isStrongPassword(password: String): Boolean {
+    val passwordPattern = Pattern.compile(
+        "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$"
+    )
+    return passwordPattern.matcher(password).matches()
+}
+
+class WeakPasswordException : Exception("Password does not meet the required criteria of the password policy.")
+
+@Composable
+fun BulletList(vararg items: String) {
+    Column {
+        items.forEach { item ->
+            Row(
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.padding(4.dp)
+            ) {
+                Text("•", modifier = Modifier.padding(end = 4.dp))
+                Text(item)
             }
         }
     }
