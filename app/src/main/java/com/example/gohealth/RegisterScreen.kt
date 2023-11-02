@@ -56,6 +56,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
+import com.example.gohealth.data.User
+import com.example.gohealth.data.UserRepository
+import com.example.gohealth.data.UserRole
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -70,6 +73,7 @@ fun Register(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager:FocusManager = LocalFocusManager.current
     val patientRepository = PatientRepository()
+    val userRepository = UserRepository()
     val coroutineScope = rememberCoroutineScope()
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -208,16 +212,25 @@ fun Register(navController: NavHostController) {
                                     }
 
                                     // Create user in Firebase Authentication
-                                    FirebaseAuth.getInstance()
+                                    val authResult = FirebaseAuth.getInstance()
                                         .createUserWithEmailAndPassword(email, password).await()
+
+                                    // Get the UID of the newly created user
+                                    val uid = authResult.user?.uid ?: throw Exception("User not found")
+
+                                    // Add new user with Patient role to Firestore
+                                    val newUser = User(uid, email = email, UserRole.PATIENT)
+                                    userRepository.addUser(newUser)
 
                                     // Add new patient to Firestore
                                     val newPatient = Patient(
+                                        userId = uid,
                                         firstName = firstName,
                                         lastName = lastName,
                                         email = email
                                     )
                                     patientRepository.addPatient(newPatient)
+
 
                                     navController.navigate("login")
 

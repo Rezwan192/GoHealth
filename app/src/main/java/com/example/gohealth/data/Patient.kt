@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class Patient(
-    val id: String = "",
+    val userId: String = "",
     val firstName: String,
     val lastName: String,
     val email: String
@@ -25,7 +25,6 @@ class PatientRepository {
             .addOnSuccessListener { documentReference ->
                 val documentId = documentReference.id
                 println("Patient added with ID: $documentId")
-                documentReference.update("id", documentId) // add the document Id to the patient id field
             }
             .addOnFailureListener { e ->
                 println("Error adding patient: $e")
@@ -40,6 +39,23 @@ class PatientRepository {
                     document.toObject(Patient::class.java)
                 }
                 onSuccess(patients)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    // Get patient using authId
+    fun getPatient(authId: String, onSuccess: (Patient) -> Unit, onFailure: (Exception) -> Unit) {
+        patientsCollection.whereEqualTo("userId", authId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val patient = querySnapshot.documents.firstOrNull()?.toObject(Patient::class.java)
+                if (patient != null) {
+                    onSuccess(patient)
+                } else {
+                    onFailure(Exception("Patient not found"))
+                }
             }
             .addOnFailureListener { e ->
                 onFailure(e)

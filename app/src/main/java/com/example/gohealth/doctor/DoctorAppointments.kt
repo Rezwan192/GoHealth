@@ -150,10 +150,10 @@ fun AppointmentsListContent(
 @Composable
 fun AppointmentCard(appointment: Appointment, doctors: List<Doctor>, patients: List<Patient>) {
     // Get doctor and patient names from fetched lists
-    val doctorName = doctors.find { it.id == appointment.doctorId }?.let {
+    val doctorName = doctors.find { it.userId == appointment.doctorId }?.let {
         "${it.firstName} ${it.lastName}"
     } ?: "Unknown Doctor"
-    val patientName = patients.find { it.id == appointment.patientId }?.let {
+    val patientName = patients.find { it.userId == appointment.patientId }?.let {
         "${it.firstName} ${it.lastName}"
     } ?: "Unknown Patient"
 

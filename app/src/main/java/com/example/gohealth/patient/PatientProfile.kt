@@ -1,5 +1,6 @@
 package com.example.gohealth.patient
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,8 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,11 +31,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.R
+import com.example.gohealth.data.Patient
+import com.example.gohealth.data.PatientRepository
+import com.google.firebase.auth.FirebaseAuth
 
-
-//@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PatientProfile(navController: NavHostController) {
+    val patientRepository = PatientRepository()
+
+    // State
+    var patient by remember { mutableStateOf<Patient?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+
+    // Fetching patient data
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+    if (currentUserId != null && patient == null && !isError) {
+        patientRepository.getPatient(currentUserId,
+            onSuccess = { fetchedPatient ->
+                patient = fetchedPatient
+                isLoading = false
+            },
+            onFailure = { error ->
+                isError = true
+                isLoading = false
+                Log.e("PatientDataFetch", "Error fetching patient data: ${error.localizedMessage}")
+            }
+        )
+    }
+
+    // UI
+    Box(
+        modifier = Modifier.fillMaxSize().background(color = colorResource(id = R.color.my_primary)),
+        contentAlignment = Alignment.Center
+    ) {
+        when {
+            isLoading -> {
+                // Render a loading state
+                CircularProgressIndicator(color = Color.White)
+            }
+            isError -> {
+                // Render an error state
+                Text(text = "Failed to load data", color = Color.White)
+            }
+            patient != null -> {
+                // Render the patient profile content
+                PatientProfileContent(patient!!)
+            }
+        }
+    }
+}
+
+@Composable
+fun PatientProfileContent(patient: Patient) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +106,7 @@ fun PatientProfile(navController: NavHostController) {
                         .padding(8.dp),
                 ){
                     Text(
-                        text = "Name:",
+                        text = "Name: ",
                         color = colorResource(id = R.color.black),
                         textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
@@ -60,7 +114,7 @@ fun PatientProfile(navController: NavHostController) {
                     )
 
                     Text(
-                        text = " Johnny C. Doe",
+                        text = "${patient.firstName} ${patient.lastName}",
                         color = colorResource(id = R.color.black),
                         fontSize = 18.sp,
                     )
@@ -152,7 +206,7 @@ fun PatientProfile(navController: NavHostController) {
                         .padding(8.dp),
                 ){
                     Text(
-                        text = "Contact Info:",
+                        text = "Contact Info: ",
                         color = colorResource(id = R.color.black),
                         textDecoration = TextDecoration.Underline,
                         fontSize = 18.sp,
@@ -160,7 +214,7 @@ fun PatientProfile(navController: NavHostController) {
                     )
 
                     Text(
-                        text = " CashShmoney@gmail.com",
+                        text = patient.email,
                         color = colorResource(id = R.color.black),
                         fontSize = 18.sp,
                     )
@@ -263,7 +317,7 @@ fun PatientProfile(navController: NavHostController) {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = "Welcome! John Doe",
+                    text = "Welcome! ${patient.firstName} ${patient.lastName}",
                     color = colorResource(id = R.color.white),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
@@ -272,4 +326,5 @@ fun PatientProfile(navController: NavHostController) {
         }
     }
 }
+
 

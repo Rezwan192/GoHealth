@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class Doctor(
-    val id: String = "",
+    val userId: String = "",
     val firstName: String,
     val lastName: String,
     val specialty: String
