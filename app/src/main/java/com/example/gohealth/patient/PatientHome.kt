@@ -226,7 +226,7 @@ fun PatientHome(navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = {navController.navigate("chat")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
@@ -242,7 +242,7 @@ fun PatientHome(navController: NavHostController) {
                         Image(
                             painter = painterResource(id = R.drawable.chaticon),
                             contentDescription = null,  // Image is decorative; no content description needed
-                            modifier = Modifier.size(40.dp)  // Adjust the size of the image as needed
+//                            modifier = Modifier.size(40.dp)  // Adjust the size of the image as needed
                         )
                         Text(
                             text = "Chat",
