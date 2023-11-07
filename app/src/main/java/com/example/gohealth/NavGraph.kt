@@ -55,5 +55,8 @@ fun Nav(){
         composable(route = "prescription"){
             PrescriptionList(navController)
         }
+        composable(route = "chat"){
+            ChatFeature(navController)
+        }
     }
 }
