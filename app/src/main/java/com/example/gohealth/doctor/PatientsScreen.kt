@@ -112,6 +112,8 @@ fun PatientsList(navController: NavHostController, patientRepository: PatientRep
 
 @Composable
 fun PatientCard(patient: Patient,navController: NavHostController) {
+    val patientId = patient.userId
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,7 +157,7 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
-                onClick = { navController.navigate("patientprofile") }, // Nav to patient profile
+                onClick = { navController.navigate("patientprofile/$patientId") }, // Nav to patient profile
                 colors = ButtonDefaults.buttonColors(
                     MaterialTheme.colorScheme.secondaryContainer
                 ),
@@ -171,20 +173,3 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
         }
     }
 }
-
-
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
-//
-//@Composable
-//fun AppPreview() {
-//    GoHealthTheme {
-//        PatientsList()
-//    }
-//}

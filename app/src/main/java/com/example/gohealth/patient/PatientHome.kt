@@ -87,6 +87,7 @@ fun PatientHome(navController: NavHostController) {
 
 @Composable
 fun PatientContent(patient: Patient, navController: NavHostController) {
+    val patientId = patient.userId
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -126,7 +127,7 @@ fun PatientContent(patient: Patient, navController: NavHostController) {
 
 
                 Button(
-                    onClick = {navController.navigate("patientprofile")},
+                    onClick = {navController.navigate("patientprofile/$patientId")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)

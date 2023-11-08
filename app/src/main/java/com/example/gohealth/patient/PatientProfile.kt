@@ -36,7 +36,7 @@ import com.example.gohealth.data.PatientRepository
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun PatientProfile(navController: NavHostController) {
+fun PatientProfile(navController: NavHostController, patientId: String) {
     val patientRepository = PatientRepository()
 
     // State
@@ -44,10 +44,11 @@ fun PatientProfile(navController: NavHostController) {
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
 
-    // Fetching patient data
-    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-    if (currentUserId != null && patient == null && !isError) {
-        patientRepository.getPatient(currentUserId,
+//    // if no Patient id is passed, get the current user id
+//    val userId = patientId ?: FirebaseAuth.getInstance().currentUser?.uid
+    // fetch the Patient data using the Patient Id
+    if (patient == null && !isError) {
+        patientRepository.getPatient(patientId,
             onSuccess = { fetchedPatient ->
                 patient = fetchedPatient
                 isLoading = false

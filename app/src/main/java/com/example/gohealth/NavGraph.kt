@@ -1,9 +1,11 @@
 package com.example.gohealth
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.gohealth.doctor.DoctorAppointments
 import com.example.gohealth.doctor.DoctorHome
 import com.example.gohealth.doctor.DoctorLogin
@@ -44,8 +46,13 @@ fun Nav(){
         composable(route = "doctorhome") {
             DoctorHome(navController)
         }
-        composable(route = "patientprofile"){
-            PatientProfile(navController)
+        composable(
+            route = "patientprofile/{patientId}",
+            arguments = listOf(navArgument("patientId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            // Retrieve the patient ID from the backStackEntry arguments
+            val patientId = backStackEntry.arguments?.getString("patientId")
+            PatientProfile(navController, patientId!!)
         }
         composable(route = "doctorprofile"){
             DoctorProfile(navController)
