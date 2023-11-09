@@ -12,7 +12,20 @@
           "package_name": "com.example.gohealth"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1005057864580-kudm6de1n672c6h7dnsfchgo452fr0og.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gohealth",
+            "certificate_hash": "e055e5fc01748c1652fe5418ec189909f0783193"
+          }
+        },
+        {
+          "client_id": "1005057864580-o9cm3redck3vbhhqrf7foudbrdglhpn4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCBTPtY8QlOPdk_GJQef_eBq6CxWqwC_bw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005057864580-o9cm3redck3vbhhqrf7foudbrdglhpn4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
