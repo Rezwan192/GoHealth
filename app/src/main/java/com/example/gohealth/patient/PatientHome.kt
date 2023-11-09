@@ -162,7 +162,7 @@ fun PatientHome(navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate("testresult")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)

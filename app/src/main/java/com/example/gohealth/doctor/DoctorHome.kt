@@ -83,7 +83,7 @@ fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) 
                     item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/ } }
                     item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Outlined.DateRange, title = "Appointment Requests") { /*TODO*/} }
-                    item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { /*TODO*/} }
+                    item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { navController.navigate("document")} }
                 },
             )
         }
