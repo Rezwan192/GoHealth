@@ -176,7 +176,8 @@ fun Register(navController: NavHostController) {
                                     "At least one lowercase letter (a-z)",
                                     "At least one uppercase letter (A-Z)",
                                     "At least one special character from the set @#$%^&+=!",
-                                    "A minimum length of 8 characters"
+                                    "A minimum length of 8 characters",
+                                    "No whitespace characters"
                                 )
                             },
                             confirmButton = {
@@ -284,7 +285,7 @@ fun isStrongPassword(password: String): Boolean {
     return passwordPattern.matcher(password).matches()
 }
 
-class WeakPasswordException : Exception("Password does not meet the required criteria of the password policy.")
+//class WeakPasswordException : Exception("Password does not meet the required criteria of the password policy.")
 
 @Composable
 fun BulletList(vararg items: String) {

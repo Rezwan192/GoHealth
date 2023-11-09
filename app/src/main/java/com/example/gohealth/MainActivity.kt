@@ -1,11 +1,14 @@
 package com.example.gohealth
 
+import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +49,9 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,16 +61,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.navigation.NavHostController
 import com.example.gohealth.ui.theme.GoHealthTheme
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import com.example.gohealth.displayOneTapUI
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
@@ -81,10 +102,11 @@ class MainActivity : ComponentActivity() {
 fun Login(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager:FocusManager = LocalFocusManager.current
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-
+    var showOneTapUI by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +130,7 @@ fun Login(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.background,
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             ){
                 Column(
@@ -205,18 +227,105 @@ fun Login(navController: NavHostController) {
                         modifier = Modifier.padding(bottom = 15.dp)
                     )
                     Row (verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google_logo),
-                            contentDescription = "Google Logo",
+                        Card(
                             modifier = Modifier
                                 .size(40.dp)
-                        )
+                                .clickable {
+                                    showOneTapUI = true // Set the flag to show the one-tap UI
+                                    val activity = context as MainActivity
+                                    displayOneTapUI(activity)
+//                                    coroutineScope.launch {
+//                                        try {
+//                                            val signInIntent = googleSignInClient.signInIntent
+//                                            val accountTask =
+//                                                GoogleSignIn.getSignedInAccountFromIntent(
+//                                                    signInIntent
+//                                                )
+//                                            val account =
+//                                                accountTask.getResult(ApiException::class.java)
+//
+//                                            if (account != null) {
+//                                                val authCredential =
+//                                                    GoogleAuthProvider.getCredential(
+//                                                        account.idToken,
+//                                                        null
+//                                                    )
+//                                                val result = FirebaseAuth
+//                                                    .getInstance()
+//                                                    .signInWithCredential(authCredential)
+//                                                    .await()
+//
+//                                                if (result.user != null) {
+//                                                    // Google registration successful, navigate to the desired screen
+//                                                    navController.navigate("patienthome")
+//                                                } else {
+//                                                    // Google registration failed
+//                                                    errorMessage =
+//                                                        "Google sign-in: Failed to get Google account."
+//                                                    Log.e(
+//                                                        "GoogleSignIn",
+//                                                        "Failed to get Google account."
+//                                                    )
+//                                                }
+//                                            } else {
+//                                                // Handle failure to get account
+//                                                errorMessage =
+//                                                    "Google sign-in failed: Failed to get Google account."
+//                                                Log.e(
+//                                                    "GoogleSignIn",
+//                                                    "Failed to get Google account."
+//                                                )
+//                                            }
+//                                        } catch (e: ApiException) {
+//                                            // Handle the ApiException, e.g., show an error message
+//                                            errorMessage =
+//                                                "Google sign-in failed: An ApiException occurred."
+//                                            Log.e(
+//                                                "GoogleSignIn",
+//                                                "Google registration failed: ${e.message}"
+//                                            )
+//                                        } catch (e: Exception) {
+//                                            // Handle other general exceptions
+//                                            errorMessage = e.message
+//                                                ?: "Google sign-in failed: An error occurred. B"
+//                                            Log.e(
+//                                                "FirebaseAuth",
+//                                                "Google registration error: ${e.message}",
+//                                                e
+//                                            )
+//                                        }
+//                                    }
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.background
+                            ),
+                            shape = RectangleShape
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.google_logo),
+                                contentDescription = "Google Logo",
+                                modifier = Modifier
+                                    .size(40.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.size(20.dp))
-                        Image(
-                            painter = painterResource(id = R.drawable.microsoft_logo),
-                            contentDescription = "Microsoft Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
+                        Card(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable {
+                                    //handleGoogleRegistration()
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.background
+                            ),
+                            shape = RectangleShape
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.microsoft_logo),
+                                contentDescription = "Microsoft Logo",
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
                     }
                     Divider(
                         color = MaterialTheme.colorScheme.onBackground,//Color.LightGray,
@@ -243,6 +352,8 @@ fun Login(navController: NavHostController) {
         }
     }
 }
+
+
 
 sealed class InputType(
     val label: String,
