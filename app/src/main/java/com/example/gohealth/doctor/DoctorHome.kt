@@ -11,14 +11,16 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,12 +28,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,19 +42,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) {
+    val logoutdialog = remember { mutableStateOf(false) }
+
+    if (logoutdialog.value){
+        AlertDialog(
+            onDismissRequest = { logoutdialog.value = false },
+            confirmButton = {
+                Button(onClick = {logoutdialog.value = false; navController.navigate("accounttype")})
+                {
+                    Text(text = "Confirm")
+                }
+            },
+
+            dismissButton = {
+                Button(onClick = {logoutdialog.value = false})
+                {
+                    Text(text = "Cancel")
+                }
+            },
+
+            title = {
+                Text(text = "You are attempting to logout")
+            },
+            text = {
+                Text(text = "Are you sure?")
+            }
+        )
+    }
+
     Scaffold(Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             MediumTopAppBar(
                 title = {
                     Text(text = "Welcome Back, Dr. Shmoe", maxLines = 2, style = MaterialTheme.typography.headlineLarge)
                 },
+
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { logoutdialog.value = true }) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
+                            imageVector = Icons.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
