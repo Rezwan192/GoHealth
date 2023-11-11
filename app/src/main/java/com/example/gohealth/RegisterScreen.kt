@@ -224,10 +224,21 @@ fun Register(navController: NavHostController) {
 
                                     // Add new patient to Firestore
                                     val newPatient = Patient(
+                                        documentId = "",
                                         userId = uid,
                                         firstName = firstName,
                                         lastName = lastName,
-                                        email = email
+                                        email = email,
+                                        dateOfBirth = "",
+                                        address = "",
+                                        phoneNumber = "",
+                                        height = "",
+                                        weight = "",
+                                        bloodType = "",
+                                        primaryDoctor = null,
+                                        prescriptions = "",
+                                        allergies = "",
+                                        insurance = "",
                                     )
                                     patientRepository.addPatient(newPatient)
 
@@ -373,20 +384,3 @@ fun TextInput(
         keyboardActions = keyboardActions
     )
 }
-
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
-//
-//@Composable
-//fun RegisterScreenPreview() {
-//    GoHealthTheme {
-//        Register()
-//    }
-//}
-

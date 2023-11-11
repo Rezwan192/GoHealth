@@ -7,10 +7,11 @@ data class Appointment (
     val id: String = "",
     val patientId: String,
     val doctorId: String,
-    val timestamp: Long,  // Time of the appointment
+    val time: Long,  // Time of the appointment
+    val reason: String,
     val status: String = "Scheduled"  // e.g. Scheduled, Completed, Cancelled
 ) {
-    constructor(): this ("","","",0,"")
+    constructor(): this ("","","",0,"","")
 }
 
 class AppointmentRepository {

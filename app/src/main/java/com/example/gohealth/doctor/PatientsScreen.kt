@@ -154,7 +154,7 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
         Row (modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.secondary),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
                 onClick = { navController.navigate("patientprofile/$patientId") }, // Nav to patient profile
@@ -166,6 +166,20 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
             {
                 Text(
                     text = "View Profile",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    MaterialTheme.colorScheme.secondaryContainer
+                ),
+                modifier = Modifier.padding(8.dp)
+            )
+            {
+                Text(
+                    text = "Schedule an Appointment",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )

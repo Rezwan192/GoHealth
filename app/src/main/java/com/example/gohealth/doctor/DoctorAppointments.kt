@@ -168,7 +168,7 @@ fun AppointmentCard(appointment: Appointment, doctors: List<Doctor>, patients: L
             Text(text = "Doctor Name: $doctorName")
             Text(text = "Status: ${appointment.status}")
             // Format the timestamp to a readable date/time
-            Text(text = "Date: ${formatTimestamp(appointment.timestamp)}")
+            Text(text = "Date: ${formatTimestamp(appointment.time)}")
         }
     }
 }
