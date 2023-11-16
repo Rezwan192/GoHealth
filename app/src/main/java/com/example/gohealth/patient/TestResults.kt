@@ -21,6 +21,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.R
 
@@ -37,6 +38,15 @@ fun TestResultScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            Text(
+                modifier = Modifier
+                    .padding(12.dp),
+                text = "Test Results",
+                color = colorResource(id = R.color.white),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
+
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
                 Image(painter = painterResource(id = R.drawable.bloodtest), contentDescription = null)

@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.R
 
@@ -36,6 +38,15 @@ fun DocumentScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            Text(
+                modifier = Modifier
+                    .padding(12.dp),
+                text = "Documents",
+                color = colorResource(id = R.color.white),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
+
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
                 Image(painter = painterResource(id = R.drawable.bloodtest), contentDescription = null)
