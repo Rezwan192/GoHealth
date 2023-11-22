@@ -41,7 +41,7 @@ fun ChangeDoctorScreen(navController: NavHostController) {
         AlertDialog(
             onDismissRequest = { changedialog.value = false },
             confirmButton = {
-                Button(onClick = {changedialog.value = false; navController.navigate("accounttype")})
+                Button(onClick = {changedialog.value = false})
                 {
                     Text(text = "Confirm")
                 }
