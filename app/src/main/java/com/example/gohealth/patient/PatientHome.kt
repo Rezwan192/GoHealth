@@ -11,10 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,12 +37,51 @@ import com.example.gohealth.R
 
 @Composable
 fun PatientHome(navController: NavHostController) {
+    val logoutdialog = remember { mutableStateOf(false) }
+
+    if (logoutdialog.value){
+        AlertDialog(
+            onDismissRequest = { logoutdialog.value = false },
+            confirmButton = {
+                Button(onClick = {logoutdialog.value = false; navController.navigate("accounttype")})
+                {
+                    Text(text = "Confirm")
+                }
+            },
+
+            dismissButton = {
+                Button(onClick = {logoutdialog.value = false})
+                {
+                    Text(text = "Cancel")
+                }
+            },
+
+            title = {
+                Text(text = "You are attempting to logout")
+            },
+            text = {
+                Text(text = "Are you sure?")
+            }
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = colorResource(id = R.color.my_primary)),
         contentAlignment = Alignment.Center
     ) {
+
+        Row(modifier = Modifier.align(Alignment.TopStart))
+        {
+            IconButton(onClick = { logoutdialog.value = true }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
         Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,7 +208,7 @@ fun PatientHome(navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate("testresult")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
@@ -197,7 +243,7 @@ fun PatientHome(navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate("changedoc")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
