@@ -4,7 +4,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class Appointment (
-    val id: String = "",
+    val documentId: String = "",
     val patientId: String,
     val doctorId: String,
     val time: Long,  // Time of the appointment
@@ -21,7 +21,15 @@ class AppointmentRepository {
     fun createAppointment(appointment: Appointment) {
         appointmentsCollection.add(appointment)
             .addOnSuccessListener { documentReference ->
-                println("Appointment added with ID: ${documentReference.id}")
+                // Now that the document is created, update it with its generated ID
+                val appointmentId = documentReference.id
+                appointmentsCollection.document(appointmentId).update("documentId", appointmentId)
+                    .addOnSuccessListener {
+                        println("Appointment added with ID: $appointmentId")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error updating appointment with ID: $e")
+                    }
             }
             .addOnFailureListener { e ->
                 println("Error adding appointment: $e")

@@ -5,12 +5,17 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class Doctor(
-    val userId: String = "",
+    val doctorId: String = "",
     val firstName: String,
     val lastName: String,
+    val insurances: String,
+    val languages: String,
+    val medLicense: String,
+    val phoneNumber: String,
+    val education: String,
     val specialty: String
 ) {
-    constructor(): this("","","","")
+    constructor(): this("","","","","","","","","")
 }
 
 class DoctorRepository {

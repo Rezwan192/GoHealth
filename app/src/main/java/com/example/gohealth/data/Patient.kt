@@ -7,7 +7,7 @@ import com.google.firebase.ktx.Firebase
 
 data class Patient(
     val documentId: String,
-    val userId: String = "",
+    val patientId: String = "",
     val firstName: String,
     val lastName: String,
     val dateOfBirth: String?,
@@ -69,7 +69,7 @@ class PatientRepository {
 
     // Get patient using authId
     fun getPatient(authId: String, onSuccess: (Patient) -> Unit, onFailure: (Exception) -> Unit) {
-        patientsCollection.whereEqualTo("userId", authId)
+        patientsCollection.whereEqualTo("patientId", authId)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val patient = querySnapshot.documents.firstOrNull()?.toObject(Patient::class.java)

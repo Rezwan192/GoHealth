@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 data class User(
-    val uid: String,              // Firebase Authentication UID
+    val userId: String,              // Firebase Authentication UID
     val email: String,            // Email from Firebase Authentication
     val role: UserRole,           // Enum representing the user role (Doctor or Patient)
 ) {
