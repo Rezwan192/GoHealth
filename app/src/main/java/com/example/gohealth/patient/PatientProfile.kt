@@ -85,7 +85,7 @@ fun PatientProfile(navController: NavHostController, patientId: String) {
             onFailure = { error ->
                 isError = true
                 isLoading = false
-                Log.e("PatientDataFetch", "Error fetching patient data: ${error.localizedMessage}")
+                Log.e("PatientDataFetch", "Error fetching patient data: ${error.localizedMessage} ${patientId}")
             }
         )
     }

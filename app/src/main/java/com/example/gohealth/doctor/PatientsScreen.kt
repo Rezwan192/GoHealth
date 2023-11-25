@@ -29,18 +29,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.gohealth.components.ScheduleAppointment
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
+import com.example.gohealth.data.AppointmentRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientsList(navController: NavHostController, patientRepository: PatientRepository = PatientRepository()) {
+fun PatientsList(navController: NavHostController,
+                 patientRepository: PatientRepository = PatientRepository(),
+) {
     // State for patients
     val patients = remember { mutableStateOf<List<Patient>?>(null) }
     // State for loading indicator
@@ -110,9 +116,26 @@ fun PatientsList(navController: NavHostController, patientRepository: PatientRep
     }
 }
 
+
 @Composable
-fun PatientCard(patient: Patient,navController: NavHostController) {
-    val patientId = patient.userId
+fun PatientCard(patient: Patient,
+                navController: NavHostController
+) {
+    val appointmentRepository = AppointmentRepository()
+    val patientId = patient.patientId
+    val doctorId = "NM7De6VePLQdXJfZKCd7MzjMSp22" // temporary until doctor auth is fully implemented
+    var showDialog by remember { mutableStateOf(false) }
+
+    // handle the Schedule appointment dialog
+    if (showDialog) {
+        ScheduleAppointment(
+            doctorId = doctorId,
+            patientId = patientId,
+            appointmentRepository = appointmentRepository,
+            onDismiss = { showDialog = false },
+            onAppointmentCreated = { showDialog = false }
+        )
+    }
 
     Card(
         modifier = Modifier
@@ -152,8 +175,8 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
             modifier = Modifier.padding(top = 8.dp)
         )
         Row (modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary),
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
@@ -171,7 +194,7 @@ fun PatientCard(patient: Patient,navController: NavHostController) {
                 )
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { showDialog = true },
                 colors = ButtonDefaults.buttonColors(
                     MaterialTheme.colorScheme.secondaryContainer
                 ),

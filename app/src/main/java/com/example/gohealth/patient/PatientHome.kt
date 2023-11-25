@@ -87,7 +87,7 @@ fun PatientHome(navController: NavHostController) {
 
 @Composable
 fun PatientContent(patient: Patient, navController: NavHostController) {
-    val patientId = patient.userId
+    val patientId = patient.patientId
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -310,7 +310,6 @@ fun PatientContent(patient: Patient, navController: NavHostController) {
                         )
                     }
                 }
-
             }
         }
     }

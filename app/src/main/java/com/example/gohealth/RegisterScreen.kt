@@ -225,7 +225,7 @@ fun Register(navController: NavHostController) {
                                     // Add new patient to Firestore
                                     val newPatient = Patient(
                                         documentId = "",
-                                        userId = uid,
+                                        patientId = uid,
                                         firstName = firstName,
                                         lastName = lastName,
                                         email = email,

@@ -36,13 +36,14 @@ class AppointmentRepository {
             }
     }
 
-    fun deleteAppointment(appointmentId: String) {
-        appointmentsCollection.document(appointmentId).delete()
+    fun cancelAppointment(appointmentId: String) {
+        val updateData = mapOf("status" to "Cancelled")
+        appointmentsCollection.document(appointmentId).update(updateData)
             .addOnSuccessListener {
-                println("Appointment successfully deleted!")
+                println("Appointment with ID $appointmentId successfully cancelled!")
             }
             .addOnFailureListener { e ->
-                println("Error deleting appointment: $e")
+                println("Error cancelling appointment: $e")
             }
     }
 
@@ -68,6 +69,46 @@ class AppointmentRepository {
             }
             .addOnFailureListener { e ->
                 onFailure(e)
+            }
+    }
+
+    fun getAllScheduledAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.whereEqualTo("status", "Scheduled")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun updateElapsedAppointmentsToCompleted() {
+        val currentTime = System.currentTimeMillis()
+
+        // Query for Scheduled appointments where time is less than the current time
+        appointmentsCollection
+            .whereEqualTo("status", "Scheduled")
+            .whereLessThan("time", currentTime)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val appointmentId = document.id
+                    // Update the status to Completed
+                    appointmentsCollection.document(appointmentId).update("status", "Completed")
+                        .addOnSuccessListener {
+                            println("Appointment $appointmentId updated to Completed")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error updating appointment $appointmentId: $e")
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                println("Error fetching elapsed appointments: $e")
             }
     }
 }
