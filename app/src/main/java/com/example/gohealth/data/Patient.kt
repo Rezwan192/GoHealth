@@ -1,19 +1,30 @@
 package com.example.gohealth.data
 
-import com.google.firebase.firestore.CollectionReference
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 
 data class Patient(
+    val documentId: String,
+    val patientId: String = "",
     val firstName: String,
     val lastName: String,
-    val email: String
+    val dateOfBirth: String?,
+    val address: String?,
+    val phoneNumber: String?,
+    val email: String,
+    val height: String?,
+    val weight: String?,
+    val bloodType: String?,
+    val primaryDoctor: Doctor? = null,
+    val allergies: String?,
+    val prescriptions: String?,
+    val insurance: String?
 ) {
     // No-argument constructor as required by Firestore
-    constructor() : this ("","","")
+    constructor() : this ("","","","","","","","","", "","",null,"","","")
+
 }
 
 class PatientRepository {
@@ -22,13 +33,23 @@ class PatientRepository {
 
     // add new patient to the Patients collection
     fun addPatient(patient: Patient) {
-        db.collection("patients")
-            .add(patient)
-            .addOnSuccessListener { documentReference ->
-                println("Patient added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                println("Error adding patient: $e")
+        val patientDocumentRef = patientsCollection.document()
+
+        // Set the patient data without documentId
+        patientDocumentRef.set(patient)
+            .addOnSuccessListener {
+                // Update the document with its own ID
+                val patientId = patientDocumentRef.id
+                patientDocumentRef.update("documentId", patientId)
+                    .addOnSuccessListener {
+                        println("Patient added with ID: $patientId")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error updating patient with documentId: $e")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error adding patient: $e")
+                    }
             }
     }
 
@@ -44,6 +65,27 @@ class PatientRepository {
             .addOnFailureListener { e ->
                 onFailure(e)
             }
+    }
+
+    // Get patient using authId
+    fun getPatient(authId: String, onSuccess: (Patient) -> Unit, onFailure: (Exception) -> Unit) {
+        patientsCollection.whereEqualTo("patientId", authId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val patient = querySnapshot.documents.firstOrNull()?.toObject(Patient::class.java)
+                if (patient != null) {
+                    onSuccess(patient)
+                } else {
+                    onFailure(Exception("Patient not found"))
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun updatePatient(documentId: String, updates: Map<String, Any>): Task<Void> {
+        return db.collection("patients").document(documentId).update(updates)
     }
 }
 

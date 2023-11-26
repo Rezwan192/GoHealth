@@ -113,8 +113,8 @@ fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) 
                     item(span = { GridItemSpan(2)}) { ProfilePicture() }
                     item { DoctorMenuCard(icon = Icons.Filled.AccountBox, title = "Profile") { navController.navigate("doctorprofile")} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Face, title = "Patients") { navController.navigate("patientscreen")} }
-                    item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/ } }
-                    item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { /*TODO*/} }
+                    item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/} }
+                    item { DoctorMenuCard(icon = Icons.Filled.DateRange, title = "Appointments") { navController.navigate("appointment")} }
                     item { DoctorMenuCard(icon = Icons.Outlined.DateRange, title = "Appointment Requests") { /*TODO*/} }
                     item { DoctorMenuCard(icon = Icons.Rounded.Menu, title = "Documents") { navController.navigate("document")} }
                 },
@@ -175,19 +175,3 @@ fun ProfilePicture(modifier: Modifier = Modifier) {
         )
     }
 }
-
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
-
-//@Composable
-//fun ScreenPreview() {
-//    GoHealthTheme {
-//        DoctorHome("Doe")
-//    }
-//}
