@@ -38,9 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.gohealth.components.ScheduleAppointment
+import com.example.gohealth.data.AppointmentRepository
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
-import com.example.gohealth.data.AppointmentRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

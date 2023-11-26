@@ -1,8 +1,5 @@
 package com.example.gohealth.components
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,9 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.gohealth.data.Appointment
 import com.example.gohealth.data.AppointmentRepository
 import java.time.LocalDate
 import java.time.LocalTime
@@ -40,12 +35,10 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleAppointment(
-    doctorId: String,
-    patientId: String,
-    appointmentRepository: AppointmentRepository,
-    onAppointmentCreated: () -> Unit,
-    onDismiss: () -> Unit
+fun RescheduleAppointment(
+    appointmentId: String,
+    onDismiss: () -> Unit,
+    onAppointmentReschedule: () -> Unit
 ) {
     var reason by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
@@ -54,6 +47,7 @@ fun ScheduleAppointment(
     var selectedTime by remember { mutableStateOf(LocalTime.NOON) }
     var isTimePickerDialogShown by remember { mutableStateOf(false) }
     var timeString by remember { mutableStateOf("") }
+    val appointmentRepository = AppointmentRepository()
 
     // Update dateString when selectedDate changes
     LaunchedEffect(selectedDate) {
@@ -97,7 +91,7 @@ fun ScheduleAppointment(
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text("Create Appointment", style = MaterialTheme.typography.titleLarge) },
+        title = { Text("Reschedule Appointment", style = MaterialTheme.typography.titleLarge) },
         text = {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -107,10 +101,18 @@ fun ScheduleAppointment(
                         onValueChange = { newValue ->
                             if (newValue.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))) {
                                 dateString = newValue
-                                selectedDate = LocalDate.parse(newValue, DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+                                selectedDate = LocalDate.parse(
+                                    newValue,
+                                    DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                                )
                             }
                         },
-                        label = { Text("Date (MM/DD/YYYY)", style = MaterialTheme.typography.labelSmall) },
+                        label = {
+                            Text(
+                                "Date (MM/DD/YYYY)",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
                         modifier = Modifier.weight(1f),
                         trailingIcon = {
                             IconButton(onClick = { isDatePickerDialogShown = true }) {
@@ -125,7 +127,12 @@ fun ScheduleAppointment(
                         value = timeString,
                         readOnly = true,
                         onValueChange = { /* Ignored as the field is read-only */ },
-                        label = { Text("Time (HH:MM)", style = MaterialTheme.typography.labelSmall) },
+                        label = {
+                            Text(
+                                "Time (HH:MM)",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
                         modifier = Modifier.weight(1f),
                         trailingIcon = {
                             IconButton(onClick = { isTimePickerDialogShown = true }) {
@@ -138,7 +145,12 @@ fun ScheduleAppointment(
                 TextField(
                     value = reason,
                     onValueChange = { reason = it },
-                    label = { Text("Reason for Appointment", style = MaterialTheme.typography.labelMedium) },
+                    label = {
+                        Text(
+                            "Reason for Appointment",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
@@ -152,18 +164,12 @@ fun ScheduleAppointment(
                 onClick = {
                     val zonedDateTime = ZonedDateTime.of(selectedDate, selectedTime, ZoneId.systemDefault())
                     val timestamp = zonedDateTime.toInstant().toEpochMilli()
-                    val newAppointment = Appointment(
-                        patientId = patientId,
-                        doctorId = doctorId,
-                        time = timestamp,
-                        reason = reason
-                    )
-                    appointmentRepository.createAppointment(newAppointment)
-                    onAppointmentCreated()
+                    appointmentRepository.rescheduleAppointment(appointmentId, timestamp)
+                    onAppointmentReschedule()
                 },
                 colors = confirmButtonColors
             ) {
-                Text("Create Appointment", style = MaterialTheme.typography.labelMedium)
+                Text("Reschedule Appointment", style = MaterialTheme.typography.labelMedium)
             }
         },
         dismissButton = {
@@ -175,53 +181,4 @@ fun ScheduleAppointment(
             }
         }
     )
-}
-
-@Composable
-fun ShowDatePicker(currentDate: LocalDate, onDateSelected: (LocalDate) -> Unit, onDismiss: () -> Unit) {
-    val context = LocalContext.current
-    val year = currentDate.year
-    val month = currentDate.monthValue - 1
-    val day = currentDate.dayOfMonth
-
-    val dialog = DatePickerDialog(
-        context,
-        { _, year, monthOfYear, dayOfMonth ->
-            onDateSelected(LocalDate.of(year, monthOfYear + 1, dayOfMonth))
-        }, year, month, day
-    )
-
-    // Prevent the user from selecting dates before the current day
-    dialog.datePicker.minDate = System.currentTimeMillis() - 1000
-    dialog.setOnDismissListener { onDismiss() }
-    dialog.show()
-}
-
-@Composable
-fun ShowTimePicker(
-    currentTime: LocalTime,
-    onTimeSelected: (LocalTime) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    val context = LocalContext.current
-
-    val dialog = TimePickerDialog(
-        context,
-        { _, selectedHour, selectedMinute ->
-            val selectedTime = LocalTime.of(selectedHour, selectedMinute)
-            // Only allow the user to select appointment hours from 8:00 am to 4:30 pm
-            if (selectedTime.isAfter(LocalTime.of(7, 59)) && selectedTime.isBefore(LocalTime.of(16, 31))) {
-                onTimeSelected(selectedTime)
-            } else {
-                // Show a Toast message if the time is outside the allowed range
-                Toast.makeText(context, "Please choose a time between 8:00 AM and 4:30 PM.", Toast.LENGTH_LONG).show()
-            }
-        },
-        currentTime.hour,
-        currentTime.minute,
-        false  // 'false' for 12-hour view
-    )
-
-    dialog.setOnDismissListener { onDismiss() }
-    dialog.show()
 }

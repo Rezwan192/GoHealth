@@ -8,6 +8,8 @@ data class Doctor(
     val doctorId: String = "",
     val firstName: String,
     val lastName: String,
+    val email: String,
+    val address: String,
     val insurances: String,
     val languages: String,
     val medLicense: String,
@@ -15,7 +17,7 @@ data class Doctor(
     val education: String,
     val specialty: String
 ) {
-    constructor(): this("","","","","","","","","")
+    constructor(): this("","","","","","","","","", "","")
 }
 
 class DoctorRepository {

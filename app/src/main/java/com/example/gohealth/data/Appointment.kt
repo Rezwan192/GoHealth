@@ -49,7 +49,7 @@ class AppointmentRepository {
 
     fun rescheduleAppointment(appointmentId: String, newTimestamp: Long) {
         appointmentsCollection.document(appointmentId)
-            .update("timestamp", newTimestamp)
+            .update("time", newTimestamp)
             .addOnSuccessListener {
                 println("Appointment successfully rescheduled!")
             }
@@ -74,6 +74,20 @@ class AppointmentRepository {
 
     fun getAllScheduledAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
         appointmentsCollection.whereEqualTo("status", "Scheduled")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun getAppointmentsForPatient(patientId: String, onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.whereEqualTo("patientId", patientId)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val appointments = querySnapshot.documents.mapNotNull { document ->

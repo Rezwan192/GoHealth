@@ -1,16 +1,12 @@
 package com.example.gohealth.doctor
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -18,7 +14,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -42,16 +37,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.gohealth.components.RescheduleAppointment
+import com.example.gohealth.components.ScheduleAppointment
 import com.example.gohealth.data.Appointment
 import com.example.gohealth.data.AppointmentRepository
 import com.example.gohealth.data.Doctor
 import com.example.gohealth.data.DoctorRepository
 import com.example.gohealth.data.Patient
 import com.example.gohealth.data.PatientRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -68,7 +64,7 @@ fun DoctorAppointments(navController: NavHostController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Upcoming Appointments")
+                    Text("Upcoming Appointments", style = MaterialTheme.typography.titleLarge)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -96,10 +92,11 @@ fun AppointmentsListContent(
     val isLoading = remember { mutableStateOf(true) }
     // State for errors
     val error = remember { mutableStateOf<Exception?>(null) }
+    // State to refresh screen
     val refreshTrigger = remember { mutableStateOf(false) }
 
     // Refresh the screen after an appointment is cancelled
-    val onAppointmentCancelled = {
+    val onAppointmentUpdate = {
         refreshTrigger.value = !refreshTrigger.value
     }
 
@@ -179,7 +176,7 @@ fun AppointmentsListContent(
                     AppointmentCard(
                         appointment = appointment,
                         patients = patients.value!!,
-                        onAppointmentCancelled = onAppointmentCancelled
+                        onAppointmentUpdate = onAppointmentUpdate
                     )
                 }
             }
@@ -191,7 +188,7 @@ fun AppointmentsListContent(
 fun AppointmentCard(
     appointment: Appointment,
     patients: List<Patient>,
-    onAppointmentCancelled: () -> Unit
+    onAppointmentUpdate: () -> Unit
 ) {
     // Get patient attributes from fetched lists
     val patientName = patients.find { it.patientId == appointment.patientId }?.let {
@@ -201,6 +198,7 @@ fun AppointmentCard(
     val patientPhone = patients.find { it.patientId == appointment.patientId }?.phoneNumber ?: "Unknown Patient"
     var showMenu by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
+    var showRescheduleAppointmentDialog by remember { mutableStateOf(false) }
     val appointmentRepository = AppointmentRepository()
 
     // Handle the cancel appointment confirmation dialog
@@ -214,7 +212,7 @@ fun AppointmentCard(
                     onClick = {
                         // Call the cancelAppointment function
                         appointmentRepository.cancelAppointment(appointment.documentId)
-                        onAppointmentCancelled()
+                        onAppointmentUpdate()
                         showConfirmationDialog = false
                     }
                 ) {
@@ -227,6 +225,17 @@ fun AppointmentCard(
                 }
             }
         )
+    }
+
+    // handle the Reschedule appointment dialog
+    if (showRescheduleAppointmentDialog) {
+        RescheduleAppointment(
+            appointmentId = appointment.documentId,
+            onDismiss = { showRescheduleAppointmentDialog = false },
+            onAppointmentReschedule = {
+                showRescheduleAppointmentDialog = false
+                onAppointmentUpdate()
+            })
     }
 
     ElevatedCard(
@@ -249,11 +258,22 @@ fun AppointmentCard(
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false }
                 ) {
-                    DropdownMenuItem(text = { Text(text = "Cancel Appointment") }, onClick = {
+                    DropdownMenuItem(
+                        text = { Text(text = "Reschedule Appointment") },
+                        onClick = {
+                            // Set the flag to show the reschedule dialog
+                            showRescheduleAppointmentDialog = true
+                            showMenu = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(text = "Cancel Appointment") },
+                        onClick = {
                         // Set the flag to show the confirmation dialog
                         showConfirmationDialog = true
                         showMenu = false
-                    })
+                        }
+                    )
                 }
             }
             Column(modifier = Modifier.padding(16.dp)) {
@@ -320,6 +340,6 @@ fun AppointmentCard(
 
 @Composable
 fun formatTimestamp(timestamp: Long): String {
-    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+    val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault())
     return sdf.format(Date(timestamp))
 }
