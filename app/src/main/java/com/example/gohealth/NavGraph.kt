@@ -13,6 +13,7 @@ import com.example.gohealth.doctor.DoctorProfile
 import com.example.gohealth.doctor.DocumentScreen
 import com.example.gohealth.doctor.PatientsList
 import com.example.gohealth.patient.ChangeDoctorScreen
+import com.example.gohealth.patient.PatientAppointments
 import com.example.gohealth.patient.PatientHome
 import com.example.gohealth.patient.PatientProfile
 import com.example.gohealth.patient.PrescriptionList
@@ -77,6 +78,9 @@ fun Nav(){
         }
         composable(route = "changedoc"){
             ChangeDoctorScreen(navController)
+        }
+        composable(route = "patient-appointments") {
+            PatientAppointments(navController)
         }
     }
 }

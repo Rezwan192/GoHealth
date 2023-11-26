@@ -202,7 +202,7 @@ fun PatientContent(patient: Patient, navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate("patient-appointments") },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
