@@ -1,5 +1,6 @@
 package com.example.gohealth.doctor
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,11 +53,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.gohealth.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun DoctorLogin(navController: NavHostController) {
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -101,23 +106,49 @@ fun DoctorLogin(navController: NavHostController) {
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(top = 20.dp, bottom = 14.dp)
                     )
+                    Text(
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 15.sp
+                    )
                     TextInput(
+                        value = email,
                         DocType.Email,
                         keyboardActions = KeyboardActions(onNext = {
                             passwordFocusRequester.requestFocus()
-                        })
+                        }),
+                        onValueChange = { email = it }
                     )
                     TextInput(
+                        value = password,
                         DocType.Password,
                         keyboardActions = KeyboardActions(onDone = {
                             focusManager.clearFocus()
                         }),
-                        focusRequester = passwordFocusRequester
+                        focusRequester = passwordFocusRequester,
+                        onValueChange = { password = it }
                     )
 
                     Button(
                         onClick = {
-                            navController.navigate("doctorhome")
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        navController.navigate("doctorhome")
+                                    } else {
+                                        val exception = task.exception
+                                        if (exception is com.google.firebase.FirebaseException) {
+                                            if (exception.message?.contains("INVALID_LOGIN_CREDENTIALS") == true) {
+                                                errorMessage = "Incorrect email or password."
+                                            } else {
+                                                errorMessage = "Login failed: An error occurred."
+                                            }
+                                        } else {
+                                            errorMessage = "Login failed: An error occurred."
+                                        }
+                                        Log.e("FirebaseAuth", "Login error: ${exception?.message}", exception)
+                                    }
+                                }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -184,22 +215,22 @@ sealed class DocType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInput(
+    value: String,
     inputType: DocType,
     focusRequester: FocusRequester? = null,
-    keyboardActions: KeyboardActions
+    keyboardActions: KeyboardActions,
+    onValueChange: (String) -> Unit
 ) {
 
-    var text:String by remember { mutableStateOf("") }
-
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = value,
+        onValueChange = { newValue -> onValueChange(newValue) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp)
             .focusRequester(focusRequester ?: FocusRequester()),
         leadingIcon = { Icon(imageVector = inputType.icon, contentDescription = null) },
-        label = { Text(text = inputType.label) },
+        label = { Text(text = inputType.label)},
         shape = RoundedCornerShape(32.dp),
         singleLine = true,
         keyboardOptions = inputType.keyboardOperations,
@@ -207,3 +238,30 @@ fun TextInput(
         keyboardActions = keyboardActions
     )
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun TextInput(
+//    inputType: DocType,
+//    focusRequester: FocusRequester? = null,
+//    keyboardActions: KeyboardActions
+//) {
+//
+//    var text:String by remember { mutableStateOf("") }
+//
+//    OutlinedTextField(
+//        value = text,
+//        onValueChange = { text = it },
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 15.dp)
+//            .focusRequester(focusRequester ?: FocusRequester()),
+//        leadingIcon = { Icon(imageVector = inputType.icon, contentDescription = null) },
+//        label = { Text(text = inputType.label) },
+//        shape = RoundedCornerShape(32.dp),
+//        singleLine = true,
+//        keyboardOptions = inputType.keyboardOperations,
+//        visualTransformation = inputType.visualTransformation,
+//        keyboardActions = keyboardActions
+//    )
+//}
