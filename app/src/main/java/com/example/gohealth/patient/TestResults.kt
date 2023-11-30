@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +35,8 @@ fun TestResultScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .padding(12.dp)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -49,7 +51,10 @@ fun TestResultScreen(navController: NavHostController) {
 
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
-                Image(painter = painterResource(id = R.drawable.bloodtest), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.blood_test_result),
+                    contentDescription = null,
+                    modifier = Modifier
+                    .fillMaxWidth())
                 Column(modifier = Modifier.padding(9.dp)) {
                     Text(text = "Blood Test",
                         fontWeight = FontWeight.W500,
@@ -60,7 +65,11 @@ fun TestResultScreen(navController: NavHostController) {
 
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
-                Image(painter = painterResource(id = R.drawable.livertest), contentDescription = null)
+                Image(
+                    painter = painterResource(id = R.drawable.liver_function_test),
+                    contentDescription = null,
+                    modifier = Modifier
+                            .fillMaxWidth())
                 Column(modifier = Modifier.padding(9.dp)) {
                     Text(text = "Liver test",
                         fontWeight = FontWeight.W500,
@@ -71,7 +80,10 @@ fun TestResultScreen(navController: NavHostController) {
 
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
-                Image(painter = painterResource(id = R.drawable.urinalysis), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.urine_test),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth())
                 Column(modifier = Modifier.padding(9.dp)) {
                     Text(text = "Urine Analysis",
                         fontWeight = FontWeight.W500,

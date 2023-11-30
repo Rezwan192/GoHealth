@@ -52,6 +52,7 @@ android {
 
 dependencies {
 
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     val navVersion = ("2.7.3")
 
     implementation ("androidx.navigation:navigation-compose:$navVersion")
