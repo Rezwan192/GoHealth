@@ -84,13 +84,6 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
-                        }
                     }
                 }
             }
@@ -124,13 +117,6 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
-                        }
                     }
                 }
             }
@@ -165,13 +151,6 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
-                        }
                     }
                 }
             }
@@ -205,13 +184,6 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
-                        }
                     }
                 }
             }
