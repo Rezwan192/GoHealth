@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +35,8 @@ fun DocumentScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .padding(12.dp)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -49,7 +51,10 @@ fun DocumentScreen(navController: NavHostController) {
 
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
-                Image(painter = painterResource(id = R.drawable.bloodtest), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.document),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth())
                 Column(modifier = Modifier.padding(9.dp)) {
                     Text(text = "Patient Blood test",
                         fontWeight = FontWeight.W500,
@@ -60,7 +65,10 @@ fun DocumentScreen(navController: NavHostController) {
 
             Card(onClick = { /*TODO*/ },
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)){
-                Image(painter = painterResource(id = R.drawable.patientdocument), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.documents),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth())
                 Column(modifier = Modifier.padding(9.dp)) {
                     Text(text = "Patient Documents",
                         fontWeight = FontWeight.W500,
