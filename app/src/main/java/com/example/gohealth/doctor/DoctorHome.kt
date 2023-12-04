@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -55,6 +56,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -189,7 +191,7 @@ fun DoctorContent(doctor: Doctor, navController: NavHostController) {
                 modifier = Modifier
                     .padding(contentPadding),
                 content = {
-                    item (span = { GridItemSpan(2)}) { ProfilePicture(doctor!!) }
+                    item (span = { GridItemSpan(2)}) { ProfilePicture() }
                     item {
                         DoctorMenuCard(
                             icon = Icons.Filled.AccountBox,
@@ -265,68 +267,14 @@ fun DoctorMenuCard(
     }
 }
 
-fun uploadImageToFirebaseStorage(imageUri: Uri?, doctor: Doctor) {
-    val doctorRepository = DoctorRepository()
-    imageUri?.let { uri ->
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val imageRef = storageRef.child("doctor_profile_images/${doctor.doctorId}.jpg")
-        val uploadTask = imageRef.putFile(uri)
-
-        uploadTask.addOnSuccessListener { _ ->
-            imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                val imageUrl = downloadUri.toString()
-                val updates = mapOf("profileImage" to imageUrl)
-
-                val task: Task<Void> = doctorRepository.updateDoctor(doctor.doctorId, updates)
-            }
-        }.addOnFailureListener { exception ->
-
-            Log.e("FirebaseStorage", "Image upload failed: ${exception.message}", exception)
-        }
-    }
-}
-
 @Composable
-fun ProfilePicture(doctor: Doctor) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val photoPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) {
-        if (it != null) {
-            Log.d("PhotoPicker", "Selected URI: $it")
-            imageUri = it
-            uploadImageToFirebaseStorage(it, doctor)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
-        }
-    }
-
-
-    if (doctor.profileImage != "") {
-        imageUri = Uri.parse(doctor.profileImage)
-    }
-
-
-    AsyncImage(
+fun ProfilePicture(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.patrick),
+        contentDescription = null,
         modifier = Modifier
-            .padding(16.dp)
-            .size(140.dp)
+            .size(180.dp)
+            .padding(top = 10.dp, bottom = 15.dp)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.background)
-            .clickable {
-                photoPicker.launch(
-                    PickVisualMediaRequest(
-                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                    )
-                )
-            },
-        model = ImageRequest.Builder(LocalContext.current).data(imageUri)
-            .crossfade(enable = true).build(),
-        contentDescription = "Avatar Image",
-        contentScale = ContentScale.Crop,
     )
-    LaunchedEffect(imageUri) {
-        uploadImageToFirebaseStorage(imageUri, doctor)
-    }
 }
