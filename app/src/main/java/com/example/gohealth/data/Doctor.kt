@@ -1,5 +1,6 @@
 package com.example.gohealth.data
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,9 +14,10 @@ data class Doctor(
     val medLicense: String,
     val phoneNumber: String,
     val education: String,
-    val specialty: String
+    val specialty: String,
+    val profileImage: String?,
 ) {
-    constructor(): this("","","","","","","","","")
+    constructor(): this("","","","","","","","","", "")
 }
 
 class DoctorRepository {
@@ -34,5 +36,25 @@ class DoctorRepository {
             .addOnFailureListener { e ->
                 onFailure(e)
             }
+    }
+
+    fun getDoctor(authId: String, onSuccess: (Doctor) -> Unit, onFailure: (Exception) -> Unit) {
+        doctorsCollection.whereEqualTo("doctorId", authId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val doctor = querySnapshot.documents.firstOrNull()?.toObject(Doctor::class.java)
+                if (doctor != null) {
+                    onSuccess(doctor)
+                } else {
+                    onFailure(Exception("Doctor not found"))
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun updateDoctor(documentId: String, updates: Map<String, Any>): Task<Void> {
+        return db.collection("doctors").document(documentId).update(updates)
     }
 }

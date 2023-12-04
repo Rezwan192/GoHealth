@@ -1,6 +1,10 @@
 package com.example.gohealth
 
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -66,6 +70,17 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.tasks.await
 import java.util.regex.Pattern
 import kotlinx.coroutines.launch
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 
 @Composable
@@ -239,6 +254,7 @@ fun Register(navController: NavHostController) {
                                         prescriptions = "",
                                         allergies = "",
                                         insurance = "",
+                                        profileImage = "",
                                     )
                                     patientRepository.addPatient(newPatient)
 
