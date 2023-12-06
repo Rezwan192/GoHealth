@@ -84,6 +84,18 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 0",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take one capsule every 12 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                        }
                     }
                 }
             }
@@ -117,6 +129,18 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 1",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take two capsule every 8 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                        }
                     }
                 }
             }
@@ -151,6 +175,18 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 2",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take three pump every 10 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                        }
                     }
                 }
             }
@@ -184,6 +220,18 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 3",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take one capsule every 6 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                        }
                     }
                 }
             }
