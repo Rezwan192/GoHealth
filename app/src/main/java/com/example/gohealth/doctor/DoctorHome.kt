@@ -122,6 +122,7 @@ fun DoctorHome(navController: NavHostController, modifier: Modifier = Modifier) 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DoctorContent(doctor: Doctor, navController: NavHostController) {
+    val doctorId = doctor.doctorId
     val logoutdialog = remember { mutableStateOf(false) }
     if (logoutdialog.value) {
         AlertDialog(
@@ -196,7 +197,7 @@ fun DoctorContent(doctor: Doctor, navController: NavHostController) {
                         DoctorMenuCard(
                             icon = Icons.Filled.AccountBox,
                             title = "Profile"
-                        ) { navController.navigate("doctorprofile") }
+                        ) { navController.navigate("doctorprofile/$doctorId") }
                     }
                     item {
                         DoctorMenuCard(
