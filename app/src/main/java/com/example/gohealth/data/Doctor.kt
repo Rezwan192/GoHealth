@@ -53,8 +53,4 @@ class DoctorRepository {
                 onFailure(e)
             }
     }
-
-    fun updateDoctor(documentId: String, updates: Map<String, Any>): Task<Void> {
-        return db.collection("doctors").document(documentId).update(updates)
-    }
 }
