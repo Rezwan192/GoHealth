@@ -9,6 +9,7 @@ data class Doctor(
     val doctorId: String = "",
     val firstName: String,
     val lastName: String,
+    val email: String,
     val insurances: String,
     val languages: String,
     val medLicense: String,
@@ -17,7 +18,7 @@ data class Doctor(
     val specialty: String,
     val profileImage: String?,
 ) {
-    constructor(): this("","","","","","","","","", "")
+    constructor(): this("","","","","","","","","", "","")
 }
 
 class DoctorRepository {
