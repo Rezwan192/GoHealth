@@ -17,7 +17,7 @@ data class Patient(
     val height: String?,
     val weight: String?,
     val bloodType: String?,
-    val primaryDoctor: Doctor? = null,
+    val primaryDoctor: String?,
     val allergies: String?,
     val prescriptions: String?,
     val insurance: String?,
