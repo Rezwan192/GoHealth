@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -84,12 +83,17 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 0",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take one capsule every 12 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
                         }
                     }
                 }
@@ -124,12 +128,17 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 1",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take two capsule every 8 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
                         }
                     }
                 }
@@ -165,12 +174,17 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 2",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take three pump every 10 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
                         }
                     }
                 }
@@ -205,12 +219,17 @@ fun PrescriptionList(navController: NavHostController) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Used to add prescription to patient's database.
-                        Button(
-                            onClick = { /*TODO*/ }
-                        ) {
-                            Text(text = "Order")
+                        Column(horizontalAlignment = Alignment.Start) {
+                            Text(
+                                text = "Refills: 3",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
+                            Text(
+                                text = "Instruction: Take one capsule every 6 hours.",
+                                color = colorResource(id = R.color.black),
+                                fontSize = 15.sp,
+                            )
                         }
                     }
                 }

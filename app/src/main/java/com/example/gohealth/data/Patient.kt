@@ -20,10 +20,11 @@ data class Patient(
     val primaryDoctor: String?,
     val allergies: String?,
     val prescriptions: String?,
-    val insurance: String?
+    val insurance: String?,
+    val profileImage: String?,
 ) {
     // No-argument constructor as required by Firestore
-    constructor() : this ("","","","","","","","","", "","",null,"","","")
+    constructor() : this ("","","","","","","","","", "","",null,"","","","")
 
 }
 

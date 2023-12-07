@@ -170,17 +170,6 @@ fun Login(navController: NavHostController) {
                                             } else {
                                                 errorMessage = "Login failed: An error occurred."
                                             }
-
-//                                        if (exception is FirebaseAuthInvalidUserException) {
-//                                            val errorCode = exception.errorCode
-//                                            if (errorCode == "ERROR_USER_NOT_FOUND") {
-//                                                errorMessage = "Incorrect email or password"
-//                                            } else {
-//                                                errorMessage = "Login failed: An error occurred."
-//                                            }
-//                                        } else if (exception is FirebaseAuthInvalidCredentialsException) {
-//                                            errorMessage = "Incorrect email or password."
-
                                         } else {
                                             errorMessage = "Login failed: An error occurred."
                                         }
@@ -199,29 +188,10 @@ fun Login(navController: NavHostController) {
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
                     }
-                    Text(
-                        text = "Or login with:",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 15.dp)
-                    )
-                    Row (verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google_logo),
-                            contentDescription = "Google Logo",
-                            modifier = Modifier
-                                .size(40.dp)
-                        )
-                        Spacer(modifier = Modifier.size(20.dp))
-                        Image(
-                            painter = painterResource(id = R.drawable.microsoft_logo),
-                            contentDescription = "Microsoft Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
-                    }
                     Divider(
                         color = MaterialTheme.colorScheme.onBackground,//Color.LightGray,
                         thickness = 1.dp,
-                        modifier = Modifier.padding(top = 20.dp)
+                        modifier = Modifier.padding(top = 60.dp)
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
@@ -291,18 +261,4 @@ fun TextInput(
     )
 }
 
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
 
-//@Composable
-//fun AppPreview() {
-//    GoHealthTheme {
-//        Nav()
-//    }
-//}

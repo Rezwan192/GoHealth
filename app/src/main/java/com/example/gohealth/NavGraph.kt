@@ -59,8 +59,13 @@ fun Nav(){
             val patientId = backStackEntry.arguments?.getString("patientId")
             PatientProfile(navController, patientId!!)
         }
-        composable(route = "doctorprofile"){
-            DoctorProfile(navController)
+        composable(
+            route = "doctorprofile/{doctorId}",
+            arguments = listOf(navArgument("doctorId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            // Retrieve the doctor ID from the backStackEntry arguments
+            val doctorId= backStackEntry.arguments?.getString("doctorId")
+            DoctorProfile(navController, doctorId!!)
         }
         composable(route = "patientscreen"){
             PatientsList(navController)
@@ -85,6 +90,9 @@ fun Nav(){
         }
         composable(route = "appointment-requests") {
             AppointmentRequests(navController)
+        }
+        composable(route = "chatFeature"){
+            ChatFeature(navController)
         }
     }
 }
