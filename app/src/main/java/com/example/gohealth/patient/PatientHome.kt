@@ -394,7 +394,7 @@ fun PatientContent(patient: Patient, navController: NavHostController) {
 
 
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate("chatFeature")},
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(12.dp)
