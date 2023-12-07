@@ -5,10 +5,10 @@
 # Overview
 Goheath is an Android app developed with Android Studio and Firebase Database. The app is designed for Patients and Doctors to connect and access their information, whether it be recent test results, prescriptions, documents, and more.
 
-Patient Credential:
-cdeery@mail.com
+Patient Credentials: <br>
+cdeery@mail.com <br>
 Pa$$word1
 
-Doctor Credential:
-joeshmoe@gmail.com
+Doctor Credentials: <br>
+joeshmoe@gmail.com <br>
 Joefailedmedschool123!
