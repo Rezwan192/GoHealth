@@ -2,8 +2,8 @@ package com.example.gohealth
 
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.TextField
+import androidx.compose.material3.Button
+import androidx.compose.material3.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -23,14 +23,12 @@ import androidx.navigation.compose.rememberNavController
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 
-import androidx.compose.material.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
+
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.remember
@@ -66,18 +64,6 @@ class ChatChannelRepository {
 data class ChatMessage(val id: String, val text: String, val isSender: Boolean)
 data class ChatChannel(val id: String, val name: String, val lastMessage: String, val imageUrl: Int)
 
-val customTypography = Typography(
-    h4 = TextStyle(
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 30.sp
-    ),
-    body2 = TextStyle(
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Normal,
-        lineHeight = 24.sp
-    )
-)
 
 @Composable
 fun ChatFeature(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -130,8 +116,8 @@ fun ChatChannelRow(channel: ChatChannel, onClick: () -> Unit) {
             verticalArrangement = Arrangement.Center
 
         ) {
-            Text(text = channel.name, style = customTypography.h4)
-            Text(text = channel.lastMessage, style = customTypography.body2)
+            Text(text = channel.name, style = MaterialTheme.typography.bodyLarge)
+            Text(text = channel.lastMessage, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -161,7 +147,7 @@ fun ChatDetails(channel: ChatChannel) {
                 .clip(CircleShape)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = channel.name, style = customTypography.h4)
+        Text(text = channel.name, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
@@ -275,6 +261,7 @@ fun ChatMessageRow(message: ChatMessage) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageInput(onSendClicked: (String) -> Unit) {
     var messageText by remember { mutableStateOf("") }
