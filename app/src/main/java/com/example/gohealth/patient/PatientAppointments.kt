@@ -6,13 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -22,7 +20,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -49,12 +46,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.gohealth.components.RequestAppointment
-import com.example.gohealth.components.RescheduleAppointment
 import com.example.gohealth.data.Appointment
 import com.example.gohealth.data.AppointmentRepository
 import com.example.gohealth.data.Doctor
 import com.example.gohealth.data.DoctorRepository
-import com.example.gohealth.data.PatientRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -97,14 +92,13 @@ fun PatientAppointments(navController: NavHostController) {
             FloatingActionButton(
                 onClick = { showDoctorDialog.value = true },
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                shape = MaterialTheme.shapes.medium
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             ) {
                 Text(
-                    "Request Appointment",
-                    style = MaterialTheme.typography.labelMedium,
+                    "Request an Appointment",
+                    style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(18.dp)
                 )
             }
         }

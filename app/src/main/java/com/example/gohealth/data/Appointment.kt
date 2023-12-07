@@ -105,6 +105,20 @@ class AppointmentRepository {
             }
     }
 
+    fun getAllRequestedAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.whereEqualTo("status", "Requested")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
     fun getAppointmentsForPatient(patientId: String, onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
         appointmentsCollection.whereEqualTo("patientId", patientId)
             .get()
@@ -142,6 +156,28 @@ class AppointmentRepository {
             }
             .addOnFailureListener { e ->
                 println("Error fetching elapsed appointments: $e")
+            }
+    }
+
+    fun denyAppointment(appointmentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.document(appointmentId)
+            .update("status", "Denied")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun acceptAppointment(appointmentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.document(appointmentId)
+            .update("status", "Scheduled")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
             }
     }
 }

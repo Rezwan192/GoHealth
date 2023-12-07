@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.gohealth.doctor.AppointmentRequests
 import com.example.gohealth.doctor.DoctorAppointments
 import com.example.gohealth.doctor.DoctorHome
 import com.example.gohealth.doctor.DoctorLogin
@@ -81,6 +82,9 @@ fun Nav(){
         }
         composable(route = "patient-appointments") {
             PatientAppointments(navController)
+        }
+        composable(route = "appointment-requests") {
+            AppointmentRequests(navController)
         }
     }
 }
