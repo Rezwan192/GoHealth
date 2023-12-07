@@ -50,10 +50,14 @@ class ChatViewModel : ViewModel() {
 
 class ChatChannelRepository {
     fun getChatChannels(): List<ChatChannel> {
-        // Replace this with your logic to fetch chat channels from a data source
+        // Replace this with fetch chat channels
         return listOf(
-            ChatChannel("1", "Patient 1", "Hello!", android.R.drawable.ic_menu_report_image),
-            ChatChannel("2", "Patient 2", "Hello!", android.R.drawable.ic_menu_camera)
+            ChatChannel("1", "Evie Becerra", "Hello!", android.R.drawable.ic_menu_report_image),
+            ChatChannel("2", "Orsa Lambertini", "How goes it?", android.R.drawable.ic_menu_camera),
+            ChatChannel("3", "Spongebob Squarepants", "F is for friends who do stuff together!", android.R.drawable.ic_menu_report_image),
+            ChatChannel("4", "Kristyn Rash", "What should I do about this rash?", android.R.drawable.ic_menu_camera),
+            ChatChannel("5", "Mallorie Anersen", "Cool- I will see you then!", android.R.drawable.ic_menu_report_image),
+            ChatChannel("6", "Fernanda Goslin", "Wonderful- I'm free Saturday or Sunday morning", android.R.drawable.ic_menu_camera),
         )
     }
 }
@@ -90,13 +94,14 @@ fun ChatFeature(navController: NavHostController, modifier: Modifier = Modifier)
         }
         composable("chat/{channelId}") { backStackEntry ->
             val channelId = backStackEntry.arguments?.getString("channelId")
-            val selectedChannel = chatViewModel.selectedChannel
+            val selectedChannel = chatViewModel.chatChannels.find { it.id == channelId }
             selectedChannel?.let {
                 ChatScreen(it, chatViewModel) { messageText ->
                     // Handle sending the message.
                 }
             }
         }
+
     }
 }
 
@@ -109,7 +114,6 @@ fun ChatChannelRow(channel: ChatChannel, onClick: () -> Unit) {
             .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.Start
     ) {
-        // Show the profile image
         Image(
             painter = painterResource(id = channel.imageUrl),
             contentDescription = "Profile Pic",
@@ -120,7 +124,7 @@ fun ChatChannelRow(channel: ChatChannel, onClick: () -> Unit) {
                 .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
         )
 
-        Spacer(modifier = Modifier.width(8.dp)) // Spacer for spacing between image and text
+        Spacer(modifier = Modifier.width(8.dp))
 
         Column(
             verticalArrangement = Arrangement.Center
@@ -162,18 +166,31 @@ fun ChatDetails(channel: ChatChannel) {
 }
 
 @Composable
-fun ChatScreen(channel: ChatChannel, chatViewModel: ChatViewModel, onSendClicked: (String) -> Unit) {
+fun ChatScreen(
+    channel: ChatChannel,
+    chatViewModel: ChatViewModel,
+    onSendClicked: (String) -> Unit
+) {
+    val messages = remember { mutableStateListOf<ChatMessage>() }
 
-    val messages = chatViewModel.messages
+
+    DisposableEffect(chatViewModel.selectedChannel) {
+        if (chatViewModel.selectedChannel != null) {
+            // Replace this with logic to fetch messages for the given channel ID
+            val conversationMessages = getConversationMessagesForChannelId(channel.id)
+            messages.addAll(conversationMessages)
+        }
+        // Cleanup effect when the ChatScreen is disposed
+        onDispose { }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         ChatDetails(channel) // Display patient details
 
-        // Rest of your ChatScreen composable remains the same, displaying chat messages
         LazyColumn(
             modifier = Modifier.weight(1f),
-            reverseLayout = true,  // Newer messages at the bottom
             contentPadding = PaddingValues(bottom = 8.dp)
         ) {
             items(messages) { message ->
@@ -185,9 +202,46 @@ fun ChatScreen(channel: ChatChannel, chatViewModel: ChatViewModel, onSendClicked
 
         MessageInput { messageText ->
             chatViewModel.sendMessage(messageText) // Call sendMessage to add a new message
+            onSendClicked(messageText)
         }
     }
 }
+
+// Replace this with logic to fetch messages for the given channel ID
+private fun getConversationMessagesForChannelId(channelId: String): List<ChatMessage> {
+    return when (channelId) {
+        "1" -> listOf(
+            ChatMessage("1", "Hello!", isSender = true),
+        )
+        "2" -> listOf(
+            ChatMessage("2", "Hey, how are you doing?", isSender = true),
+            ChatMessage("3", "Hi", isSender = false),
+            ChatMessage("4", "How goes it?", isSender = false)
+        )
+        "3" -> listOf(
+            ChatMessage("5", "Do you like krabby patties?", isSender = true),
+            ChatMessage("6", "Yes! Ofcourse! Who doesn't?", isSender = false),
+            ChatMessage("7", "Are we friends now?", isSender = true),
+            ChatMessage("8", "F is for friends who do stuff together!", isSender = false)
+        )
+        "4" -> listOf(
+            ChatMessage("9", "Hey", isSender = false),
+            ChatMessage("10", "What should I do about this rash?", isSender = false)
+        )
+        "5" -> listOf(
+            ChatMessage("11", "Lunch friday?", isSender = true),
+            ChatMessage("12", "Cool- I will see you then!", isSender = false)
+        )
+        "6" -> listOf(
+            ChatMessage("13", "Come in for a lobotomy!", isSender = true),
+            ChatMessage("14", "What is your availability?", isSender = true),
+            ChatMessage("15", "Hey!", isSender = false),
+            ChatMessage("16", "Wonderful- I'm free Saturday or Sunday morning", isSender = false)
+        )
+        else -> emptyList()
+    }
+}
+
 
 
 
