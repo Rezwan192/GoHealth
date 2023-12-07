@@ -9,10 +9,10 @@ To run the app:
 
 1. Download Android Studio
 2. Create new project
-3. Select empty activity for phones/tablets
+3. Select Empty Activity for phones/tablets
 4. Choose device as Pixel 5
 5. Choose API 34
-6. Run App
+6. Run app
 7. Click on Patient or Doctor
 8. To login, use designated credentials provided in project submission
 
