@@ -1,12 +1,18 @@
 package com.example.gohealth.patient
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -16,14 +22,18 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -35,8 +45,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.gohealth.components.RequestAppointment
 import com.example.gohealth.components.RescheduleAppointment
 import com.example.gohealth.data.Appointment
 import com.example.gohealth.data.AppointmentRepository
@@ -44,8 +56,10 @@ import com.example.gohealth.data.Doctor
 import com.example.gohealth.data.DoctorRepository
 import com.example.gohealth.data.PatientRepository
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -53,12 +67,19 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientAppointments(navController: NavHostController){
+fun PatientAppointments(navController: NavHostController) {
+    val patientId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     val appointmentRepository = AppointmentRepository()
+    val doctorRepository = DoctorRepository()
+    val showDoctorDialog = remember { mutableStateOf(false) }
+    var showRequestAppointmentDialog by remember { mutableStateOf(false) }
+    var selectedDoctorId by remember { mutableStateOf("") }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     appointmentRepository.updateElapsedAppointmentsToCompleted()
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
@@ -71,9 +92,126 @@ fun PatientAppointments(navController: NavHostController){
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showDoctorDialog.value = true },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(
+                    "Request Appointment",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
         }
     ) { innerPadding ->
         Appointments(paddingValues = innerPadding)
+
+        if (showDoctorDialog.value) {
+            DoctorListDialog(
+                doctorRepository,
+                onDismiss = { showDoctorDialog.value = false },
+                onDoctorSelected = { doctorId ->
+                    selectedDoctorId = doctorId
+                    showRequestAppointmentDialog = true // Trigger RequestAppointment Dialog
+                }
+            )
+        }
+    }
+
+    if (showRequestAppointmentDialog) {
+        RequestAppointment(
+            doctorId = selectedDoctorId,
+            patientId = patientId,
+            onAppointmentRequested = {
+                // Handle appointment request success
+                showRequestAppointmentDialog = false
+                // Show Snackbar confirmation
+                CoroutineScope(Dispatchers.Main).launch {
+                    snackbarHostState.showSnackbar("Appointment request submitted")
+                }
+            },
+            onDismiss = { showRequestAppointmentDialog = false }
+        )
+    }
+}
+
+@Composable
+fun DoctorListDialog(
+    doctorRepository: DoctorRepository,
+    onDismiss: () -> Unit,
+    onDoctorSelected: (String) -> Unit
+) {
+    val doctors = remember { mutableStateOf<List<Doctor>?>(null) }
+
+    LaunchedEffect(Unit) {
+        doctorRepository.getAllDoctors(
+            onSuccess = { fetchedDoctors ->
+                doctors.value = fetchedDoctors
+            },
+            onFailure = { e ->
+                println("Error adding appointment: $e")
+            }
+        )
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Select a Doctor") },
+        text = {
+            LazyColumn {
+                items(doctors.value.orEmpty()) { doctor ->
+                    DoctorItem(doctor, onDoctorSelected)
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("Close")
+            }
+        }
+    )
+}
+
+@Composable
+fun DoctorItem(doctor: Doctor, onDoctorSelected: (String) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onDoctorSelected(doctor.doctorId) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier
+            .weight(1f)
+            .padding(end = 8.dp)
+        ) {
+            Text(
+                text = "${doctor.firstName} ${doctor.lastName}",
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                text = doctor.specialty,
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+        Button(
+            onClick = { onDoctorSelected(doctor.doctorId) },
+            modifier = Modifier.width(intrinsicSize = IntrinsicSize.Min) // Adjust the width
+        ) {
+            Text(
+                "Request\nAn Appointment",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onTertiary,
+                maxLines = 2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.width(120.dp) // Explicitly set the width of the text
+            )
+        }
     }
 }
 
@@ -81,8 +219,7 @@ fun PatientAppointments(navController: NavHostController){
 fun Appointments(
     paddingValues: PaddingValues,
     appointmentRepository: AppointmentRepository = AppointmentRepository(),
-    doctorRepository: DoctorRepository = DoctorRepository(),
-    patientRepository: PatientRepository = PatientRepository()
+    doctorRepository: DoctorRepository = DoctorRepository()
 ) {
     val doctors = remember { mutableStateOf<List<Doctor>?>(null) }
     val appointments = remember { mutableStateOf<List<Appointment>?>(null) }
@@ -189,7 +326,6 @@ fun AppointmentCard(
     val doctorAddress = doctors.find { it.doctorId == appointment.doctorId }?.address
     var showMenu by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
-    var showRescheduleAppointmentDialog by remember { mutableStateOf(false) }
     val appointmentRepository = AppointmentRepository()
 
     // Handle the cancel appointment confirmation dialog
@@ -218,21 +354,10 @@ fun AppointmentCard(
         )
     }
 
-    // handle the Reschedule appointment dialog
-    if (showRescheduleAppointmentDialog) {
-        RescheduleAppointment(
-            appointmentId = appointment.documentId,
-            onDismiss = { showRescheduleAppointmentDialog = false },
-            onAppointmentReschedule = {
-                showRescheduleAppointmentDialog = false
-                onAppointmentUpdate()
-            })
-    }
-
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp,),
+            .padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         Box(
@@ -249,14 +374,6 @@ fun AppointmentCard(
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false }
                 ) {
-                    DropdownMenuItem(
-                        text = { Text(text = "Reschedule Appointment") },
-                        onClick = {
-                            // Set the flag to show the reschedule dialog
-                            showRescheduleAppointmentDialog = true
-                            showMenu = false
-                        }
-                    )
                     DropdownMenuItem(
                         text = { Text(text = "Cancel Appointment") },
                         onClick = {

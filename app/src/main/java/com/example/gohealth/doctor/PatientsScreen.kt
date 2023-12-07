@@ -123,7 +123,7 @@ fun PatientCard(patient: Patient,
 ) {
     val appointmentRepository = AppointmentRepository()
     val patientId = patient.patientId
-    val doctorId = "NM7De6VePLQdXJfZKCd7MzjMSp22" // temporary until doctor auth is fully implemented
+    val doctorId = "2XKYG2BgcfSfBZ4yLwCoT8luiEK2" // temporary until doctor auth is fully implemented
     var showDialog by remember { mutableStateOf(false) }
 
     // handle the Schedule appointment dialog

@@ -9,7 +9,7 @@ data class Appointment (
     val doctorId: String,
     val time: Long,  // Time of the appointment
     val reason: String,
-    val status: String = "Scheduled"  // e.g. Scheduled, Completed, Cancelled
+    val status: String = "Scheduled"  // e.g. Scheduled, Completed, Cancelled, Requested.
 ) {
     constructor(): this ("","","",0,"","")
 }
@@ -55,6 +55,25 @@ class AppointmentRepository {
             }
             .addOnFailureListener { e ->
                 println("Error rescheduling appointment: $e")
+            }
+    }
+
+    fun requestAppointment(appointment: Appointment) {
+        val requestedAppointment = appointment.copy(status = "Requested")
+        appointmentsCollection.add(requestedAppointment)
+            .addOnSuccessListener { documentReference ->
+                // Now that the document is created, update it with its generated ID
+                val appointmentId = documentReference.id
+                appointmentsCollection.document(appointmentId).update("documentId", appointmentId)
+                    .addOnSuccessListener {
+                        println("Appointment request added with ID: $appointmentId")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error updating appointment request with ID: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                println("Error adding appointment request: $e")
             }
     }
 

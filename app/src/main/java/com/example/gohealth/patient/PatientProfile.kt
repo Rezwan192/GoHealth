@@ -219,7 +219,7 @@ fun PatientProfileContent(patient: Patient) {
             item { PatientAttributeCard("Blood Type", patient.bloodType) }
             item { PatientAttributeCard("Email", patient.email) }
             item { PatientAttributeCard("Phone Number", patient.phoneNumber) }
-            item { PatientAttributeCard("Primary Doctor", "${patient.primaryDoctor?.firstName} ${patient.primaryDoctor?.lastName}") }
+            item { PatientAttributeCard("Primary Doctor", patient.primaryDoctor) }
             item { PatientAttributeCard("Insurance", patient.insurance) }
             item { PatientAttributeCard("Allergies", patient.allergies) }
             item { PatientAttributeCard("Prescriptions", patient.prescriptions) }
