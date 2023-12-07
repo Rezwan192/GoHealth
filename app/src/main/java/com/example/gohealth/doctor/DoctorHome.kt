@@ -205,7 +205,11 @@ fun DoctorContent(doctor: Doctor, navController: NavHostController) {
                             title = "Patients"
                         ) { navController.navigate("patientscreen") }
                     }
-                    item { DoctorMenuCard(icon = Icons.Filled.Person, title = "Chat") { /*TODO*/ } }
+                    item {
+                        DoctorMenuCard(
+                            icon = Icons.Filled.Person,
+                            title = "Chat"
+                        ) { navController.navigate("chatFeature") } }
                     item {
                         DoctorMenuCard(
                             icon = Icons.Filled.DateRange,
