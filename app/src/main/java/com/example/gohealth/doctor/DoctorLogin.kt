@@ -161,31 +161,6 @@ fun DoctorLogin(navController: NavHostController) {
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
                     }
-                    Text(
-                        text = "Or login with:",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 15.dp)
-                    )
-                    Row (verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google_logo),
-                            contentDescription = "Google Logo",
-                            modifier = Modifier
-                                .size(40.dp)
-                        )
-                        Spacer(modifier = Modifier.size(20.dp))
-                        Image(
-                            painter = painterResource(id = R.drawable.microsoft_logo),
-                            contentDescription = "Microsoft Logo",
-                            modifier = Modifier.size(40.dp)
-                        )
-                    }
-                    Divider(
-                        color = MaterialTheme.colorScheme.onBackground,//Color.LightGray,
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(top = 20.dp)
-                    )
-
                 }
             }
         }
