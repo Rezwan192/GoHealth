@@ -16,5 +16,5 @@ To run the app:
 7. Click on Patient or Doctor
 8. To login, use designated credentials provided in project submission
 
-For further assistance on how to operate Android Studio, please see: https://developer.android.com/studio/run/managing-avds 
+For further assistance on how to add a virtual device on Android Studio, please see: https://developer.android.com/studio/run/managing-avds 
 
