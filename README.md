@@ -5,4 +5,15 @@
 # Overview
 Goheath is an Android app developed with Android Studio and Firebase Database. The app is designed for Patients and Doctors to connect and access their information, whether it be recent test results, prescriptions, appointments, documents, and more.
 
-In Android Studio, the app should be run on Pixel 5 API 34.
+To run the app:
+
+1. Download Android Studio
+2. Create new project
+3. Select empty activity for phones/tablets
+4. Choose device as Pixel 5
+5. Choose API 34
+6. Run App
+7. Click on Patient or Doctor
+8. To login, use designated credentials provided in project submission
+
+
