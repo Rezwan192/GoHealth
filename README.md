@@ -1,6 +1,6 @@
 # GoHealth: Fall 2023 Capstone Project
 
-Sean Angcaya, Jhon Bustamante, Rezwan Islam, Justin John
+Group Members: Sean Angcaya, Jhon Bustamante, Rezwan Islam, Justin John
 
 ![gohealthicon](https://github.com/Rezwan192/GoHealth/assets/124101509/67948af7-ed02-4033-b1e7-55d2cb48bec1)
 
