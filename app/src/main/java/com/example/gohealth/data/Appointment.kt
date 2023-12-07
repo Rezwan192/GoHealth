@@ -9,7 +9,7 @@ data class Appointment (
     val doctorId: String,
     val time: Long,  // Time of the appointment
     val reason: String,
-    val status: String = "Scheduled"  // e.g. Scheduled, Completed, Cancelled
+    val status: String = "Scheduled"  // e.g. Scheduled, Completed, Cancelled, Requested.
 ) {
     constructor(): this ("","","",0,"","")
 }
@@ -49,12 +49,31 @@ class AppointmentRepository {
 
     fun rescheduleAppointment(appointmentId: String, newTimestamp: Long) {
         appointmentsCollection.document(appointmentId)
-            .update("timestamp", newTimestamp)
+            .update("time", newTimestamp)
             .addOnSuccessListener {
                 println("Appointment successfully rescheduled!")
             }
             .addOnFailureListener { e ->
                 println("Error rescheduling appointment: $e")
+            }
+    }
+
+    fun requestAppointment(appointment: Appointment) {
+        val requestedAppointment = appointment.copy(status = "Requested")
+        appointmentsCollection.add(requestedAppointment)
+            .addOnSuccessListener { documentReference ->
+                // Now that the document is created, update it with its generated ID
+                val appointmentId = documentReference.id
+                appointmentsCollection.document(appointmentId).update("documentId", appointmentId)
+                    .addOnSuccessListener {
+                        println("Appointment request added with ID: $appointmentId")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error updating appointment request with ID: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                println("Error adding appointment request: $e")
             }
     }
 
@@ -74,6 +93,34 @@ class AppointmentRepository {
 
     fun getAllScheduledAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
         appointmentsCollection.whereEqualTo("status", "Scheduled")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun getAllRequestedAppointments(onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.whereEqualTo("status", "Requested")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val appointments = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                }
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun getAppointmentsForPatient(patientId: String, onSuccess: (List<Appointment>) -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.whereEqualTo("patientId", patientId)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val appointments = querySnapshot.documents.mapNotNull { document ->
@@ -109,6 +156,28 @@ class AppointmentRepository {
             }
             .addOnFailureListener { e ->
                 println("Error fetching elapsed appointments: $e")
+            }
+    }
+
+    fun denyAppointment(appointmentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.document(appointmentId)
+            .update("status", "Denied")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
+    fun acceptAppointment(appointmentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        appointmentsCollection.document(appointmentId)
+            .update("status", "Scheduled")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
             }
     }
 }

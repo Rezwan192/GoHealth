@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.gohealth.doctor.AppointmentRequests
 import com.example.gohealth.doctor.DoctorAppointments
 import com.example.gohealth.doctor.DoctorHome
 import com.example.gohealth.doctor.DoctorLogin
@@ -13,6 +14,7 @@ import com.example.gohealth.doctor.DoctorProfile
 import com.example.gohealth.doctor.DocumentScreen
 import com.example.gohealth.doctor.PatientsList
 import com.example.gohealth.patient.ChangeDoctorScreen
+import com.example.gohealth.patient.PatientAppointments
 import com.example.gohealth.patient.PatientHome
 import com.example.gohealth.patient.PatientProfile
 import com.example.gohealth.patient.PrescriptionList
@@ -82,6 +84,12 @@ fun Nav(){
         }
         composable(route = "changedoc"){
             ChangeDoctorScreen(navController)
+        }
+        composable(route = "patient-appointments") {
+            PatientAppointments(navController)
+        }
+        composable(route = "appointment-requests") {
+            AppointmentRequests(navController)
         }
         composable(route = "chatFeature"){
             ChatFeature(navController)

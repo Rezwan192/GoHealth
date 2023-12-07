@@ -220,7 +220,7 @@ fun DoctorContent(doctor: Doctor, navController: NavHostController) {
                         DoctorMenuCard(
                             icon = Icons.Outlined.DateRange,
                             title = "Appointment Requests"
-                        ) { /*TODO*/ }
+                        ) { navController.navigate("appointment-requests") }
                     }
                     item {
                         DoctorMenuCard(
