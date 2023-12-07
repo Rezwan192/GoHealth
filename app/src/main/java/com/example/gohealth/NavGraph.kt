@@ -83,5 +83,8 @@ fun Nav(){
         composable(route = "changedoc"){
             ChangeDoctorScreen(navController)
         }
+        composable(route = "chatFeature"){
+            ChatFeature(navController)
+        }
     }
 }
