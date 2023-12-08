@@ -9,9 +9,9 @@ Goheath is an Android app developed with Android Studio and Firebase Database. T
 
 ## To run the app:
 
-1. Download Android Studio
-2. Create a new project
-3. Select Empty Activity for phones/tablets
+1. Extract zip file
+2. Download Android Studio and open it
+3. Click "Open" and select extracted folder
 4. Choose device as Pixel 5
 5. Choose API 34
 6. Run app
